@@ -6,27 +6,8 @@ const Spinner = ({message}) => {
  
 
   return (
-    <div className='flex flex-col items-center'>
-      {/* <Audio
-  height="80"
-  width="80"
-  radius="9"
-  color="green"
-  ariaLabel="loading"
-  wrapperStyle
-  wrapperClass
-/> */}
-{/* <Circles
-  height="80"
-  width="80"
-  color="#4fa94d"
-  ariaLabel="circles-loading"
-  wrapperStyle={{}}
-  wrapperClass=""
-  visible={true}
-  
-/> */}
-<MagnifyingGlass
+  <div className='flex flex-col items-center'>
+  <MagnifyingGlass
   visible={true}
   height="80"
   width="80"

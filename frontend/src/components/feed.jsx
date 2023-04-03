@@ -1,68 +1,78 @@
 import React,{useState,useEffect} from 'react'
 import { useParams,useLocation } from 'react-router-dom'
 import {MasonaryLayout,Spinner} from './index'
-
-
-
+import qs from 'qs'
 
 const Feed = () => {
-
     const [loading,setLoading]=useState(true)
     const [imageData,setImageData]=useState([])
-    const [imageUser,setImageUser]=useState({})
     const {categoryId}=useParams()
-    const location = useLocation()
-    console.log(categoryId)
-
- const getImagesWithFilters=async ()=>{
-
-   const placeHolderValue=categoryId ? categoryId : 'wallpapers'
-   const placeholder=placeHolderValue.toLowerCase()
-   const response=await fetch(`https://api.unsplash.com/topics/${placeholder}/?client_id=ejq3XBjQOab2nvLTdZSGgPYHwrcCKvbrPZNukA6s9SM`)
-   const responseData=await response.json()
-   console.log(responseData)
-   setImageUser(responseData.cover_photo)
-   const allImages= responseData.preview_photos.map((image)=>{
-    return {
-     url:image.urls.raw,
-     sub:image.id
-    }
-   })
-   console.log('render in getImagesFilters')
-    localStorage.setItem('Images',JSON.stringify(allImages))
-    setImageData(allImages)
     
- }
-
-
-    const getImages=async ()=>{
-       const response=await fetch(`https://api.unsplash.com/photos/?client_id=ejq3XBjQOab2nvLTdZSGgPYHwrcCKvbrPZNukA6s9SM`)
-       const responseData=await response.json()
-       console.log(responseData)
-       
-       const allImages= responseData.map((image)=>{
-       return {
-        url:image.urls.raw,
-        sub:image.id,
-       
-       }
-      })
-      
-      console.log('rendering getImages')
-       localStorage.setItem('Images',JSON.stringify(allImages))
-       setImageData(allImages)
+const query = qs.stringify(
+  {
+    populate: {
+       likes : true ,
+       section : true,
+       userlist : {
+          populate : {
+            profileImage : true ,
+            posts : {
+            populate : {
+                 Image : true ,
+                 likes : true,
+                 section : true
+               }
+               }
+          } 
+        },
+       Image : true
     }
- 
+  },
+  {
+    encodeValuesOnly: true // prettify URL
+  }
+);
+
+
+
+
+
+
+
+function getTheData(){
+  const placeHolderValue=categoryId ? categoryId : 'wallpapers'
+  const placeholder=placeHolderValue.toLowerCase()
+     fetch(`http://localhost:1337/api/posts?${query}`)
+          .then(response => response.json())
+          .then(ImagesList => {
+            const dataOfImages= ImagesList.data.map((image)=>{
+            return {
+              likes : image.attributes.likes.data.map((like)=>{
+                return like.id
+              }),
+              section : image.attributes.section.data.attributes.Section,
+              userData : {
+               userName: image.attributes.userlist.data.attributes.username,
+               email : image.attributes.userlist.data.attributes.email ,
+               profileUrl : `http://localhost:1337${image.attributes.userlist.data.attributes.profileImage.data.attributes.url}`,
+               id : image.attributes.userlist.data.id
+              },
+              imageUrl : { 
+                id:image.attributes.Image.data.id,
+                url:`http://localhost:1337${image.attributes.Image.data.attributes.url}`
+              }}
+          })
+          setImageData(dataOfImages)
+          })
+         .catch(error => {
+          console.error('Error fetching data:', error);
+          });
+  }
+
 useEffect(()=>{
-   if(categoryId){
-    getImagesWithFilters()
-   }else{
-    getImages()
-   }
-   
-   setLoading(false)
-   
- },[categoryId])
+  getTheData()
+  setLoading(false)
+},[])
 
  
 
@@ -71,10 +81,8 @@ useEffect(()=>{
   return (
     <div className='flex flex-col items-center'>
      { loading ?<Spinner message={'We need to load the content , wait for it'}/>:
-     
-         <MasonaryLayout Images={imageData} imageDetails={imageUser}/>
+      <MasonaryLayout imageDetails={imageData}/>
      } 
-    
     </div>
   )
 }

@@ -18,8 +18,8 @@ const handleSearch=()=>{
 }
 
   return (
-    <div className='flex gap-2 md:gap-4 w-full mt-5 pb-6'>
-    <div className='flex justify-start items-center px-2 rounded-md bg-white  w-full border-none outline-none shadow-md '>
+    <div className='flex gap-2 md:gap-4 w-full  pb-6 mt-3'>
+    <div className='flex justify-start items-center px-2 rounded-md bg-white mt-2 w-full border-none outline-none shadow-md '>
          <input type='text' onChange={(e)=> setSearchData(e.target.value)}
          placeholder='Search'
          value={searchData}

@@ -43,7 +43,7 @@ return (
             </NavLink>
             <h3 className='mt-1 px-5 text-lg 2xl:text-xl '>Discover categories</h3>
             {categoryArray.map((category)=>{
-             return ( <NavLink to={`/category/${category.name}`}className={({isActive})=>{
+             return ( <NavLink to={`/${category.name}`}className={({isActive})=>{
                 return isActive ? isActiveStyles :isNotActiveStyles
               }} onClick={handleCloseSideBar} key={category.name}>
                {category.name}
@@ -56,9 +56,9 @@ return (
         className="absolute bottom-0"
         onClick={handleCloseSideBar}
         >
-          <div className="flex my-5 mb-3 gap-2 p-2 items-center bg-white  rounded-lg shadow-lg mx-3">
+          <div className="flex my-5 mb-3 gap-2 p-2 items-center bg-white  rounded-lg shadow-lg mx-2">
           <img src={user.picture} alt="user-profile" className='w-8 h-8 rounded-full'/>
-          <p >{user.name}</p>
+          <p className='text-center'>{user.name}</p>
           </div>
          </Link>
       )}

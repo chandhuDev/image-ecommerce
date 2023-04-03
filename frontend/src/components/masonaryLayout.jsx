@@ -3,21 +3,23 @@ import Masonary from 'react-masonry-css'
 import {Pin} from './index'
 
 const breakPoints={
-  default:5,
-  3000:6,
-  2000:5,
-  1200:3,
-  1000:2,
-  500:1
+  default:4,
+  3000:5,
+  2000:4,
+  1200:4,
+  1000:3,
+  500:2
 }
 
 const masonaryLayout = ({imageDetails}) => {
  return (
-    <Masonary breakpointCols={breakPoints} className='flex m-3 gap-2'>
+  
+   <Masonary breakpointCols={breakPoints} className='flex w-full h-full  gap-6 overflow-x-hidden overflow-y-hidden duration-300 animate-slide-fwd'>
       {imageDetails?.map((image)=>{
-        return <Pin key={image.imageUrl.id}  url={image.imageUrl.url} user_name={image.userData.username} profile_url={image.userData.profileUrl} />
+        return <Pin key={image.imageUrl.id}  url={image.imageUrl.url} userName={image.userData.userName} profileUrl={image.userData.profileUrl} detail={image}/>
       })}
     </Masonary>
+    
   )
 }
 

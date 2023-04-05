@@ -2,6 +2,7 @@ import React from 'react'
 import { NavLink,Link } from 'react-router-dom'
 import {RiHomeFill} from 'react-icons/ri'
 import {IoIosArrowForward} from 'react-icons/io'
+import { categories } from '../utils/dataUtils'
 
 import logo from '../assests/logo.png'
 
@@ -42,7 +43,7 @@ return (
              Home
             </NavLink>
             <h3 className='mt-1 px-5 text-lg 2xl:text-xl '>Discover categories</h3>
-            {categoryArray.map((category)=>{
+            {categories.map((category)=>{
              return ( <NavLink to={`/${category.name}`}className={({isActive})=>{
                 return isActive ? isActiveStyles :isNotActiveStyles
               }} onClick={handleCloseSideBar} key={category.name}>

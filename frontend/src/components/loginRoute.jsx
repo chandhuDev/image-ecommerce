@@ -6,18 +6,50 @@ import video from '../assests/share.mp4'
 import logo from '../assests/logo.png'
 import jwt_decode from 'jwt-decode'
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import image from '../assests/user.png'
+
 
 const LoginRoute = () => {
     const navigate=useNavigate()
     const onSuccess=(response) => {
      const userObject = jwt_decode(response.credential);
-     console.log(userObject);
-     localStorage.setItem('user', JSON.stringify(userObject));
+     const userData={
+      email:'user@strapi.io',
+      username:'strapiUser',
+      profileImage: image
+     }
+     pushUserData(userData)
+     localStorage.setItem('user', JSON.stringify(userData));
      if(localStorage.getItem('user')){
       navigate('/')
      }
 }
 
+
+const pushUserData = async ({userData}) => {
+  try {
+    const response = await fetch(`http://localhost:1337/api/userlists`, {
+      method: 'POST', // Use 'PATCH' if you want to partially update fields
+      headers: {
+        'Content-Type': 'application/json',
+        // Add your authorization header if needed (e.g., JWT token)
+        // 'Authorization': 'Bearer your-token'
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const updatedPost = await response.json();
+
+    if (!response.ok) {
+      throw new Error(updatedPost.message);
+    }
+
+    console.log('Update successful:', updatedPost);
+    return 
+  } catch (error) {
+    console.error('Error updating data:', error.message);
+  }
+};
 
 const onFailure=credentialResponse => {
   console.log(credentialResponse)

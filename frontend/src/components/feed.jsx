@@ -47,13 +47,14 @@ function getTheData(){
      fetch(`http://localhost:1337/api/posts?${query}`)
           .then(response => response.json())
           .then(ImagesList => {
-            console.log(ImagesList)
+            //console.log(ImagesList)
             const dataOfImages= ImagesList.data.map((image)=>{
             return {
               likes : image.attributes.likes.data.map((like)=>{
                 return like.id
               }),
               section : image.attributes.section.data.attributes.Section,
+              Description : image.attributes.Description,
               userData : {
                userName: image.attributes.userlist.data.attributes.username,
                email : image.attributes.userlist.data.attributes.email ,
@@ -66,6 +67,7 @@ function getTheData(){
                 url:`http://localhost:1337${image.attributes.Image.data.attributes.url}`
               }}
           })
+          // console.log(dataOfImages)
           setImageData(dataOfImages)
           })
          .catch(error => {

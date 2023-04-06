@@ -5,101 +5,68 @@ import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { categories } from '../utils/dataUtils';
 
-const CreatePin = ({user}) => {
+const CreatePin = () => {
   const [loading,setLoading]=useState(true)
   const [wrongImageType, setWrongImageType] = useState(true)
   const [imageAsset, setImageAsset] = useState()
-  const [destination, setDestination] = useState();
-  const [fields, setFields] = useState();
   const [about, setAbout] = useState('');
-  const [title, setTitle] = useState('')
   const [category, setCategory] = useState();
   const [saved,setSaved]=useState(false)
   
   const navigate=useNavigate()
-  const client=null
-
+  
+ const user=localStorage.getItem('user')
   const uploadImage = (e) => {
     const selectedFile = e.target.files[0];
-    // uploading asset to sanity
+    
     if (selectedFile.type === 'image/png' || selectedFile.type === 'image/svg' || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/gif' || selectedFile.type === 'image/tiff') {
       setWrongImageType(false);
-      setLoading(true);
-      client.assets
-        .upload('image', selectedFile, { contentType: selectedFile.type, filename: selectedFile.name })
-        .then((document) => {
-          setImageAsset(document);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log('Upload failed:', error.message);
-        });
+      setImageAsset(selectedFile);
     } else {
-      setLoading(false);
+      
       setWrongImageType(true);
     }
   }
 
-  const postData = async () => {
+  const postData = async ({pinDetails}) => {
     try {
-      //postId
-      const response = await fetch(`http://localhost:1337/posts/`, {
+      
+      const response = await fetch(`http://localhost:1337/api/posts`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer your-token'
+          
         },
-        body: JSON.stringify(null),//newData
+        body: JSON.stringify(pinDetails),
       });
   
-      const updatedData = await response.json();
+      const createdData = await response.json();
       
       if (!response.ok) {
-        throw new Error(updatedData.message);
+        throw new Error(createdData.message);
       }
   
-      console.log('Update successful:', updatedData);
+      console.log('createdData successful:', createdData);
+      return
     } catch (error) {
       console.error('Error updating data:', error.message);
     }
   };
 
-  // const savePin = () => {
-  //   if (title && about && destination && imageAsset?._id && category) {
-  //     setSaved(!saved)
-  //     const doc = {
-  //       _type: 'pin',
-  //       title,
-  //       about,
-  //       destination,
-  //       image: {
-  //         _type: 'image',
-  //         asset: {
-  //           _type: 'reference',
-  //           _ref: imageAsset?._id,
-  //         },
-  //       },
-  //       userId: user._id,
-  //       postedBy: {
-  //         _type: 'postedBy',
-  //         _ref: user._id,
-  //       },
-  //       category,
-  //     };
-  //     client.create(doc).then(() => {
-  //       navigate('/');
-  //     });
-  //   } else {
-  //     setFields(true);
-
-  //     setTimeout(
-  //       () => {
-  //         setFields(false);
-  //       },
-  //       2000,
-  //     );
-  //   }
-  //  }
+  const savePin = () => {
+    if (about && imageAsset && category) {
+      setSaved(!saved)
+      const pinDetails = {
+        Description:about,
+        Section : category,
+        profileImage: imageAsset,
+      };
+      postData(pinDetails)
+      navigate('/');
+    } else {
+       throw new Error("Error in saving the pin , Check all fields are filled once")
+      }
+   }
 
   return (
     <>
@@ -140,7 +107,7 @@ const CreatePin = ({user}) => {
             ) : (
               <div className="relative h-full">
                 <img
-                  src={imageAsset?.url}
+                  src={imageAsset}
                   alt="uploaded-pic"
                   className="h-full w-full"
                 />
@@ -155,13 +122,7 @@ const CreatePin = ({user}) => {
             )}
           </div>
           <div className="flex flex-1 flex-col gap-6 pl-5 mt-5 w-full">
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Add your title"
-            className="outline-none text-2xl font-bold border-b-2 border-gray-200 p-4"
-          />
+          
           {user && (
             <div className="flex gap-2 mt-2 mb-2 items-center bg-white rounded-lg ">
               <img

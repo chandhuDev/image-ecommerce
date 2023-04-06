@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation,useParams } from 'react-router-dom'
 import { ViewFeed } from './index'
 
@@ -6,17 +6,27 @@ const PinDetails=()=>{
   const [like,setLike]=useState(false)
   const {id}=useParams()
   const locate=useLocation()
+  const [postData,setPostData]=useState(null)
+  const [newData,setNewData]=useState()
+  const [comment,setComment]=useState('')
   const data = locate.state && locate.state.detail
     
  function setLikeFunc(){
   setLike(!like)
+  const updatedPost={
+    ...postData,
+    likes:[...postData,],//userid
+    Comment:comment
+  }
  }
+
+
+
 
  const updateData = async () => {
   try {
-    const newData=1
     const postId=id
-    const response = await fetch(`http://localhost:1337/posts/${postId}`, {
+    const response = await fetch(`http://localhost:1337/api/posts/${postId}`, {
       method: 'PUT', 
       headers: {
         'Content-Type': 'application/json',
@@ -37,6 +47,28 @@ const PinDetails=()=>{
   }
 };
 
+
+const getPostData= async ()=>{
+  try{
+   const response=await fetch(`http://localhost:1337/api/posts/${id}`)
+   const responseData=await response.json()
+    
+   if (!responseData.ok) {
+    throw new Error(responseData.message);
+  }
+    setPostData(responseData)
+  }
+  catch(e){
+    console.log("error in fetching",e.message)
+  }
+}
+
+
+useEffect(()=>{
+  getPostData()
+},[postData])
+
+
 return (
     <>
      <div className='flex flex-col items-center mt-4 w-full h-3/4'>
@@ -50,7 +82,7 @@ return (
            <p className=' text-xl font-semibold font-sans absolute bottom-3 left-16'> Contact : {data.userData.email}</p>
           </div>
           <div className='w-full h-full flex flex-row'>
-             <textarea placeholder="Write a comment..." rows={3} className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"></textarea>
+             <textarea placeholder="Write a comment..." rows={3} value={comment} onChange={(e) => setComment(e.target.value)}  className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"></textarea>
           </div>
           <div className='mt-4 flex flex-row w-full h-full gap-x-10 justify-center items-center'> 
               <p className='text-xl font-semibold'>Liked by : {data?.likes?.length} </p>

@@ -13,6 +13,7 @@ const LoginRoute = () => {
      const onSuccess=(response) => {
      const userObject = jwt_decode(response.credential);
      pushUserData(userObject)
+     localStorage.setItem('user', JSON.stringify(userObject));
      if(localStorage.getItem('user')){
       navigate('/')
      }
@@ -38,7 +39,7 @@ const pushUserData = async (userObject) => {
     if (!response.ok) {
       throw new Error(updatedPost.message);
     }
-    localStorage.setItem('user', JSON.stringify(updatedPost));
+    
     return 
   } catch (error) {
     console.error('Error updating data:', error.message);

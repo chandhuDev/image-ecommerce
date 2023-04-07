@@ -5,7 +5,7 @@ import qs from 'qs'
 
 const Feed = () => {
     const [loading,setLoading]=useState(true)
-    const [imageData,setImageData]=useState([])
+    const [imageData,setImageData]=useState()
     const {category}=useParams()
     
 const query = qs.stringify(
@@ -27,7 +27,6 @@ const query = qs.stringify(
         },
        Image : true
     },
-    
   },
   {
     encodeValuesOnly: true // prettify URL
@@ -35,19 +34,12 @@ const query = qs.stringify(
 );
 
 
-
-
-
-
-
 function getTheData(){
   // const categoryValue=category.toLowerCase()
   const placeHolderValue=category ? '': 'wallpapers'
-  
      fetch(`http://localhost:1337/api/posts?${query}`)
           .then(response => response.json())
           .then(ImagesList => {
-            //console.log(ImagesList)
             const dataOfImages= ImagesList.data.map((image)=>{
             return {
               likes : image.attributes.likes.data.map((like)=>{
@@ -67,7 +59,7 @@ function getTheData(){
                 url:`http://localhost:1337${image.attributes.Image.data.attributes.url}`
               }}
           })
-          // console.log(dataOfImages)
+          console.log("feeData",dataOfImages)
           setImageData(dataOfImages)
           })
          .catch(error => {
@@ -80,11 +72,7 @@ useEffect(()=>{
   setLoading(false)
 },[])
 
- 
-
-
- 
-  return (
+return (
     <div className='flex flex-col items-center w-full '>
      { loading ?<Spinner message={'We need to load the content , wait for it'}/>:
       <MasonaryLayout imageDetails={imageData}/>

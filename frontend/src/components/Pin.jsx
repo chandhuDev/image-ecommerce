@@ -4,14 +4,12 @@ import { useNavigate  } from 'react-router-dom'
 
 const Pin = ({url,userName,profileUrl,detail}) => {
    const navigate=useNavigate()
-
-  
- function getPinDetails(id){
+   function getPinDetails(id){
   navigate(`/pinDetail/${id}`,{
     state:{
       detail
   }})
-
+console.log("pinDetail",detail)
 
  }
 
@@ -25,8 +23,7 @@ const Pin = ({url,userName,profileUrl,detail}) => {
       </div>    
     </div>
     </div>
-    
-  )
+   )
 }
 
 export default Pin

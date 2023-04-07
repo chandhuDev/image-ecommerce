@@ -6,7 +6,6 @@ import qs from 'qs'
 const PinDetails=()=>{
   const [like,setLike]=useState(false)
   const {id}=useParams()
-  
   const locate=useLocation()
   const [postData,setPostData]=useState()
   const [newData,setNewData]=useState()
@@ -17,16 +16,24 @@ const PinDetails=()=>{
   console.log(data)
   const likeExist=data.likes.includes(data.userData.id)
   console.log(likeExist)
-    
+  let updatedPost={}  
  function setLikeFunc(){
   setLike(!like)
-  
-  const updatedPost={
-    ...data,
-    likes:[...postData.likes,data.userData.id],//userid
-    Comment:comment
+  if(comment&&comment.length>0&&like){
+
+    updatedPost={
+      ...data,
+      likes:[...postData.likes,data.userData.id],//userid
+      Comment:comment
+    }
   }
-  setNewData(updatedPost)
+  else if(comment&&comment.length>0){
+    updatedPost={
+      ...data,
+      Comment:comment
+    }
+  }
+   setNewData(updatedPost)
  }
 
 

@@ -28,24 +28,16 @@ const CreatePin = () => {
     }
   }
 
-  const postData = async ({pinDetails}) => {
+  const postData = async ({formData}) => {
     try {
-      
       const response = await fetch(`http://localhost:1337/api/posts`, {
         method: 'POST', 
-        headers: {
-          'Content-Type': 'application/json',
-          
-        },
-        body: JSON.stringify(pinDetails),
+        body: formData,
       });
-  
       const createdData = await response.json();
-      
       if (!response.ok) {
         throw new Error(createdData.message);
       }
-  
       console.log('createdData successful:', createdData);
       return
     } catch (error) {
@@ -53,15 +45,18 @@ const CreatePin = () => {
     }
   };
 
-  const savePin = () => {
+  const savePin =async () => {
     if (about && imageAsset && category) {
       setSaved(!saved)
+      const myBlob = await imageAsset.blob();
       const pinDetails = {
         Description:about,
         Section : category,
-        profileImage: imageAsset,
-      };
-      postData(pinDetails)
+      }
+      const formData=new FormData()
+      formData.append("data",JSON.stringify(pinDetails))
+      formData.append("files.image",myBlob,"imagePost.jpg")
+      postData(formData)
       navigate('/');
     } else {
        throw new Error("Error in saving the pin , Check all fields are filled once")

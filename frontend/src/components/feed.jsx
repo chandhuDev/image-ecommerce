@@ -13,6 +13,17 @@ const query = qs.stringify(
     populate: {
        likes : true ,
        section : true,
+       comments: {
+        populate : {
+          Comment : true,
+          userlist : {
+            populate:{
+              email : true,
+              username : true
+            }
+          }
+        }
+       },
        userlist : {
           populate : {
             profileImage : true ,
@@ -40,6 +51,7 @@ function getTheData(){
      fetch(`http://localhost:1337/api/posts?${query}`)
           .then(response => response.json())
           .then(ImagesList => {
+            console.log(ImagesList)
             const dataOfImages= ImagesList.data.map((image)=>{
             return {
               likes : image.attributes.likes.data.map((like)=>{
@@ -54,6 +66,15 @@ function getTheData(){
                id : image.attributes.userlist.data.id
               },
               id:image.id,
+              comments : image.attributes.comments.data.map((commentData)=>{
+                return {
+                  Comment: commentData.attributes.Comment,
+                  user: {
+                      name : commentData.attributes.userlist.data.attributes.username,
+                      email : commentData.attributes.userlist.data.attributes.email
+                      }
+                }
+              }),
               imageUrl : { 
                 id:image.attributes.Image.data.id,
                 url:`http://localhost:1337${image.attributes.Image.data.attributes.url}`

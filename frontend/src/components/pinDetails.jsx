@@ -7,33 +7,55 @@ const PinDetails=()=>{
   const [like,setLike]=useState(false)
   const {id}=useParams()
   const locate=useLocation()
-  const [postData,setPostData]=useState()
   const [newData,setNewData]=useState()
   const [comment,setComment]=useState('')
-  
   const data = locate.state && locate.state.detail
   const [likes,setLikes]=useState(data?.likes?.length)
-  console.log(data)
+  const [postData,setPostData]=useState()
+  //console.log(data)
   const likeExist=data.likes.includes(data.userData.id)
-  console.log(likeExist)
+  //console.log(likeExist)
   let updatedPost={}  
  function setLikeFunc(){
   setLike(!like)
   if(comment&&comment.length>0&&like){
-
-    updatedPost={
-      ...data,
-      likes:[...postData.likes,data.userData.id],//userid
-      Comment:comment
+   updatedPost={
+    attributes:{
+      ...postData.data.attributes,
+      likes:[...postData.data.attributes.likes.data,data.userData.id],//userid
+      comments:[...postData.data.attributes.comments.data,
+        {
+          attributes:{
+          // ...postData.data.attributes.comments.data.attributes,
+          Comment: comment,
+         userlist:{
+          ...postData.data.attributes.userlist.data.attributes,
+          email: data.userData.email,
+          username: data.userData.userName
+          }
+        }
+      }
+      ]
     }
+   }
   }
   else if(comment&&comment.length>0){
     updatedPost={
-      ...data,
-      Comment:comment
+      attributes:{
+      ...postData.data.attributes,
+      comments:[...postData.data.attributes.comments.data,{
+        Comment: comment,
+        userlist:{
+          ...postData.data.attributes.userlist.data.attributes,
+          email: data.userData.email,
+          username: data.userData.userName
+          }
+      }]
     }
+   }
   }
    setNewData(updatedPost)
+   console.log("InLikeButton",updatedPost)
  }
 
 
@@ -41,12 +63,16 @@ const PinDetails=()=>{
 const updateData = async () => {
   try {
     const postId=id
+    console.log("updatedData",newData)
+    const newFormData=new FormData()
+    newFormData.append("data",JSON.stringify(newData))
     const response = await fetch(`http://localhost:1337/api/posts/${postId}`, {
       method: 'PUT', 
-      body: JSON.stringify(newData),
+      body: newFormData,
     });
     const updatedData = await response.json();
     setLikes(updatedData.data.attributes.likes?.length)
+    setPostData(updatedData)
     if (!response.ok) {
       throw new Error(updatedData.message);
     }
@@ -57,23 +83,69 @@ const updateData = async () => {
 };
 
 
-// const getPostData= async ()=>{
-//   try{
-//    const response=await fetch(`http://localhost:1337/api/posts/${id}?${query}`)
-//    const responseData=await response.json()
-//    if (!responseData.ok) {
-//     throw new Error(responseData.message);
-//   }
-//     console.log("response data from strapi",responseData)
-//     setPostData(responseData)
-//   }
-//   catch(e){
-//     console.log("error in fetching",e.message)
-//   }
-// }
+const query = qs.stringify(
+  {
+    populate: {
+       likes : true ,
+       section : true,
+       comments: {
+        populate : {
+          Comment : true,
+          userlist : {
+            populate:{
+              email : true,
+              username : true
+            }
+          }
+        }
+       },
+       userlist : {
+          populate : {
+            profileImage : true ,
+            posts : {
+            populate : {
+                 Image : true ,
+                 likes : true,
+                 section : true
+               }
+               }
+          } 
+        },
+       Image : true
+    },
+  },
+  {
+    encodeValuesOnly: true // prettify URL
+  }
+)
+
+const getPostData= ()=>{
+  fetch(`http://localhost:1337/api/posts/${id}?${query}`)
+          .then(response => response.json())
+          .then(ImageData => {
+            console.log(ImageData)
+            setPostData(ImageData)
+            })
+         .catch(error => {
+          console.error('Error fetching data:', error);
+          });
+  // try{
+  //  const response=await fetch(`http://localhost:1337/api/posts/${id}?${query}`)
+  //  const responseData=await response.json()
+  //  if (!responseData.ok) {
+  //   throw new Error(responseData.message);
+  // }
+  //   console.log("response data from strapi",responseData)
+  //   setPostData(responseData)
+  //   console.log(responseData)
+  // }
+  // catch(e){
+  //   console.log("error in fetching",e.message)
+  // }
+}
 
 useEffect(()=>{
- // getPostData()
+  getPostData()
 },[])
 
 

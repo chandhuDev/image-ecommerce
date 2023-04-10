@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { categories } from '../utils/dataUtils';
 
 const CreatePin = () => {
-  const [loading,setLoading]=useState(true)
+  const [loading,setLoading]=useState(false)
   const [wrongImageType, setWrongImageType] = useState(true)
   const [imageAsset, setImageAsset] = useState()
   const [about, setAbout] = useState('');
@@ -16,20 +16,46 @@ const CreatePin = () => {
   const navigate=useNavigate()
   
  const user=localStorage.getItem('user')
+//console.log("user details",user)
   const uploadImage = (e) => {
-    const selectedFile = e.target.files[0];
-    
+    const selectedFile = e.target.files[0]
+    //console.log(selectedFile)
+    setLoading(true)
     if (selectedFile.type === 'image/png' || selectedFile.type === 'image/svg' || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/gif' || selectedFile.type === 'image/tiff') {
       setWrongImageType(false);
       setImageAsset(selectedFile);
+      setLoading(false)
     } else {
-      
       setWrongImageType(true);
+      setLoading(false)
     }
   }
 
-  const postData = async ({formData}) => {
+ 
+
+  const savePin =async () => {
+    if (about && imageAsset && category) {
+      setSaved(!saved)
+      const pinDetails = {
+        Description:about,
+        Section : category
+      }
+      postData(pinDetails)
+      navigate('/');
+    } else {
+       throw new Error("Error in saving the pin , Check all fields are filled once")
+      }
+   }
+
+   const postData = async (pinDetails) => {
     try {
+      
+      const formData=new FormData()
+      formData.append("data",JSON.stringify(pinDetails))
+      formData.append("files.Image",imageAsset,"imagePost.png")
+      for (const [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
       const response = await fetch(`http://localhost:1337/api/posts`, {
         method: 'POST', 
         body: formData,
@@ -39,29 +65,12 @@ const CreatePin = () => {
         throw new Error(createdData.message);
       }
       console.log('createdData successful:', createdData);
-      return
+      
     } catch (error) {
-      console.error('Error updating data:', error.message);
+      console.error('Error updating data:', error);
     }
   };
 
-  const savePin =async () => {
-    if (about && imageAsset && category) {
-      setSaved(!saved)
-      const myBlob = await imageAsset.blob();
-      const pinDetails = {
-        Description:about,
-        Section : category,
-      }
-      const formData=new FormData()
-      formData.append("data",JSON.stringify(pinDetails))
-      formData.append("files.image",myBlob,"imagePost.jpg")
-      postData(formData)
-      navigate('/');
-    } else {
-       throw new Error("Error in saving the pin , Check all fields are filled once")
-      }
-   }
 
   return (
     <>
@@ -104,7 +113,7 @@ const CreatePin = () => {
                 <img
                   src={imageAsset}
                   alt="uploaded-pic"
-                  className="h-full w-full"
+                  className="h-full object-cover w-3/4"
                 />
                 <button
                   type="button"
@@ -121,11 +130,11 @@ const CreatePin = () => {
           {user && (
             <div className="flex gap-2 mt-2 mb-2 items-center bg-white rounded-lg ">
               <img
-                src={user.image}
+                src={user.picture}
                 className="w-10 h-10 rounded-full"
                 alt="user-profile"
               />
-              <p className="font-bold">{user.userName}</p>
+              <p className="font-bold">{user.name}</p>
             </div>
           )}
           <input
@@ -147,7 +156,7 @@ const CreatePin = () => {
               >
                 <option value="others" className="sm:text-bg bg-white">Select Category</option>
                 {categories.map((item) => (
-                  <option className="text-base border-0 outline-none capitalize bg-white text-black " value={item.name}>
+                  <option className="text-base border-0 outline-none capitalize bg-white text-black " value={item.name} >
                     {item.name}
                   </option>
                 ))}

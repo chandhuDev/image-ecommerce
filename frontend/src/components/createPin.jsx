@@ -4,6 +4,7 @@ import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { categories } from '../utils/dataUtils';
+import qs from 'qs'
 
 const CreatePin = () => {
   const [loading,setLoading]=useState(false)
@@ -13,13 +14,15 @@ const CreatePin = () => {
   const [category, setCategory] = useState();
   const [saved,setSaved]=useState(false)
   
+  
   const navigate=useNavigate()
   
- const user=localStorage.getItem('user')
-//console.log("user details",user)
+ const userData=localStorage.getItem('user')
+ const user=JSON.parse(userData)
+ 
+
   const uploadImage = (e) => {
     const selectedFile = e.target.files[0]
-    //console.log(selectedFile)
     setLoading(true)
     if (selectedFile.type === 'image/png' || selectedFile.type === 'image/svg' || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/gif' || selectedFile.type === 'image/tiff') {
       setWrongImageType(false);
@@ -32,14 +35,10 @@ const CreatePin = () => {
   }
 
  
-
-  const savePin =async () => {
+ const savePin =async () => {
     if (about && imageAsset && category) {
       setSaved(!saved)
-      const pinDetails = {
-        Description:about,
-        Section : category
-      }
+      let pinDetails ={}
       postData(pinDetails)
       navigate('/');
     } else {
@@ -47,26 +46,37 @@ const CreatePin = () => {
       }
    }
 
-   const postData = async (pinDetails) => {
+
+const postData = async (pinDetails) => {
     try {
-      
+      const [response1, response2] = await Promise.all([
+        fetch(`http://localhost:1337/api/userlists?filters[email][$eq]=${user.email}&populate=*`),
+        fetch(`http://localhost:1337/api/sections?filters[Section][$eq]=${category}&populate=*`)
+      ]);
+      const data1 = await response1.json();
+      const data2 = await response2.json();
       const formData=new FormData()
+      pinDetails={
+        Description:about,
+        section:data2.data[0].id,
+        userlist:data1.data[0].id
+      }
+      
       formData.append("data",JSON.stringify(pinDetails))
       formData.append("files.Image",imageAsset,"imagePost.png")
       for (const [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
-      const response = await fetch(`http://localhost:1337/api/posts`, {
+      const response3 = await fetch(`http://localhost:1337/api/posts`, {
         method: 'POST', 
         body: formData,
       });
-      const createdData = await response.json();
-      if (!response.ok) {
+      const createdData = await response3.json();
+      if (!response3.ok) {
         throw new Error(createdData.message);
       }
       console.log('createdData successful:', createdData);
-      
-    } catch (error) {
+      } catch (error) {
       console.error('Error updating data:', error);
     }
   };
@@ -150,7 +160,7 @@ const CreatePin = () => {
               <p className="mb-2 font-semibold text:lg sm:text-xl">Choose Pin Category</p>
               <select
                 onChange={(e) => {
-                  setCategory(e.target.value);
+                  setCategory(e.target.value.toLowerCase());
                 }}
                 className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
               >

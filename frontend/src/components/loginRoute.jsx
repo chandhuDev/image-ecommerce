@@ -39,7 +39,8 @@ const pushUserData = async (userObject) => {
     if (!response.ok) {
       throw new Error(updatedPost.message);
     }
-    
+    localStorage.setItem('userDataId',JSON.stringify(updatedPost.data.id))
+    console.log(updatedPost)
     return 
   } catch (error) {
     console.error('Error updating data:', error.message);

@@ -7,65 +7,67 @@ const PinDetails=()=>{
   const [like,setLike]=useState(false)
   const {id}=useParams()
   const locate=useLocation()
-  const [newData,setNewData]=useState()
+  const [postWithComment,setPostWithComment]=useState()
+  const [postWithLike,setPostWithLike]=useState()
   const [comment,setComment]=useState('')
   const data = locate.state && locate.state.detail
   const [likes,setLikes]=useState(data?.likes?.length)
   const [postData,setPostData]=useState()
-  //console.log(data)
+  
   const likeExist=data.likes.includes(data.userData.id)
-  //console.log(likeExist)
-  let updatedPost={}  
+  
+  let updatedPostWithComment={}  
+  let updatedPostWithLike={}  
  function setLikeFunc(){
   setLike(!like)
+  const userlist=localStorage.getItem('userDataId')
+  const userId=JSON.parse(userlist)
+  console.log(userId)
   if(comment&&comment.length>0&&like){
-   updatedPost={
-    attributes:{
-      ...postData.data.attributes,
-      likes:[...postData.data.attributes.likes.data,data.userData.id],//userid
-      comments:[...postData.data.attributes.comments.data,
-        {
-          attributes:{
-          // ...postData.data.attributes.comments.data.attributes,
-          Comment: comment,
-         userlist:{
-          ...postData.data.attributes.userlist.data.attributes,
-          email: data.userData.email,
-          username: data.userData.userName
-          }
-        }
-      }
-      ]
-    }
+   updatedPostWithComment={
+    Comment:comment,
    }
-  }
+   updatedPostWithLike={
+    userlist:userId
+   }
+   
+    setPostWithComment(updatedPostWithComment)
+    setPostWithLike(updatedPostWithLike)
+   }
+  
   else if(comment&&comment.length>0){
-    updatedPost={
-      attributes:{
-      ...postData.data.attributes,
-      comments:[...postData.data.attributes.comments.data,{
-        Comment: comment,
-        userlist:{
-          ...postData.data.attributes.userlist.data.attributes,
-          email: data.userData.email,
-          username: data.userData.userName
-          }
-      }]
-    }
+    updatedPostWithComment={
+      Comment:comment
+    
    }
+   setPostWithComment(updatedPostWithComment)
   }
-   setNewData(updatedPost)
-   console.log("InLikeButton",updatedPost)
+   
  }
 
 
 
 const updateData = async () => {
   try {
-    const postId=id
-    console.log("updatedData",newData)
-    const newFormData=new FormData()
-    newFormData.append("data",JSON.stringify(newData))
+   const postId=id
+   const commentForm=new FormData()
+   const likeForm=new FormData()
+   commentForm.append("data",JSON.stringify(postWithComment))
+   likeForm.append("data",JSON.stringify(postWithLike))
+    const [response1, response2] = await Promise.all([
+      fetch('http://localhost:1337/api/comments', { method: 'POST', body: commentForm }),
+      fetch('http://localhost:1337/api/likes', { method: 'POST', body:  likeForm}),
+      ])
+      const result1 = await response1.json();
+      const result2 = await response2.json();
+      console.log('Result 1:', result1);
+      console.log('Result 2:', result2);
+      let updateData={
+        likes: result2.data.id,
+        comments: result1.data.id,
+      }
+      const newFormData=new FormData()
+     newFormData.append("data",JSON.stringify(updateData))
     const response = await fetch(`http://localhost:1337/api/posts/${postId}`, {
       method: 'PUT', 
       body: newFormData,
@@ -123,7 +125,7 @@ const getPostData= ()=>{
   fetch(`http://localhost:1337/api/posts/${id}?${query}`)
           .then(response => response.json())
           .then(ImageData => {
-            console.log(ImageData)
+           // console.log(ImageData)
             setPostData(ImageData)
             })
          .catch(error => {

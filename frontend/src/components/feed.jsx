@@ -46,12 +46,12 @@ const query = qs.stringify(
 
 
 function getTheData(){
-  // const categoryValue=category.toLowerCase()
+  //const categoryValue=category.toLowerCase()
   const placeHolderValue=category ? '': 'wallpapers'
      fetch(`http://localhost:1337/api/posts?${query}`)
           .then(response => response.json())
           .then(ImagesList => {
-            console.log(ImagesList)
+            //console.log(ImagesList)
             const dataOfImages= ImagesList.data.map((image)=>{
             return {
               likes : image.attributes.likes.data.map((like)=>{
@@ -80,7 +80,7 @@ function getTheData(){
                 url:`http://localhost:1337${image.attributes.Image.data.attributes.url}`
               }}
           })
-          console.log("feeData",dataOfImages)
+         
           setImageData(dataOfImages)
           })
          .catch(error => {

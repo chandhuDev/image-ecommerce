@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation,useParams } from 'react-router-dom'
-import { ViewFeed } from './index'
-import {Spinner} from './index'
+import { Spinner,CommentLayout } from './index'
+
 import qs from 'qs'
 
 const PinDetails=()=>{
@@ -14,7 +14,7 @@ const PinDetails=()=>{
   const data = locate.state && locate.state.detail
   const [likes,setLikes]=useState(data?.likes?.length)
   const [allPostData,setAllPostData]=useState(null)
-  const [postData,setPostData]=useState()
+  const [postData,setPostData]=useState(null)
   
   const likeExist=data.likes.includes(data.userData.id)
   
@@ -45,7 +45,27 @@ const PinDetails=()=>{
    
  }
 
-
+ const query = qs.stringify(
+  {
+    populate: {
+       likes : true ,
+       comments: {
+        populate : {
+          Comment : true,
+          userlist : {
+            populate:{
+              email : true,
+              username : true
+            }
+          }
+        }
+       },
+    },
+  },
+  {
+    encodeValuesOnly: true // prettify URL
+  }
+)
 
 const updateData = async () => {
   try {
@@ -88,47 +108,14 @@ const updateData = async () => {
 };
 
 
-const query = qs.stringify(
-  {
-    populate: {
-       likes : true ,
-       section : true,
-       comments: {
-        populate : {
-          Comment : true,
-          userlist : {
-            populate:{
-              email : true,
-              username : true
-            }
-          }
-        }
-       },
-       userlist : {
-          populate : {
-            profileImage : true ,
-            posts : {
-            populate : {
-                 Image : true ,
-                 likes : true,
-                 section : true
-               }
-               }
-          } 
-        },
-       Image : true
-    },
-  },
-  {
-    encodeValuesOnly: true // prettify URL
-  }
-)
+
 
 const getPostData= ()=>{
   fetch(`http://localhost:1337/api/posts/${id}?${query}`)
           .then(response => response.json())
           .then(ImageData => {
            setPostData(ImageData)
+           console.log("ImageData",ImageData)
             })
          .catch(error => {
           console.error('Error fetching data:', error);
@@ -138,6 +125,7 @@ const getPostData= ()=>{
 useEffect(()=>{
   getPostData()
 },[])
+
 
 
 return (
@@ -165,7 +153,7 @@ return (
         </div>
       </div>    
      </div>
-      <ViewFeed /> 
+       {!postData ? <Spinner message={'Wait for the comments to load '}/>:<CommentLayout comments={postData}/>}  
     </>
 )
 }

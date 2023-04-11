@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Spinner from './Spinner'
+import {ViewFeed} from './index'
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -166,7 +167,7 @@ const postData = async (pinDetails) => {
               >
                 <option value="others" className="sm:text-bg bg-white">Select Category</option>
                 {categories.map((item) => (
-                  <option className="text-base border-0 outline-none capitalize bg-white text-black " value={item.name} >
+                  <option className="text-base border-0 outline-none capitalize bg-white text-black " value={item.name} key={item.id}>
                     {item.name}
                   </option>
                 ))}
@@ -186,6 +187,7 @@ const postData = async (pinDetails) => {
         </div>
        </div>
       </div>
+      <ViewFeed />
     </>
   )
 }

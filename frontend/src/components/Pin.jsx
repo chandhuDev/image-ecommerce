@@ -5,10 +5,10 @@ import { useNavigate  } from 'react-router-dom'
 const Pin = ({url,userName,profileUrl,detail}) => {
    const navigate=useNavigate()
    function getPinDetails(id){
-  navigate(`/pinDetail/${id}`,{
+   navigate(`/pinDetail/${id}`,{
     state:{
       detail
-  }})
+   }})
 console.log("pinDetail",detail)
 
  }

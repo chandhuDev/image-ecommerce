@@ -5,7 +5,7 @@ import qs from 'qs'
 
 const Feed = () => {
     const [loading,setLoading]=useState(true)
-    const [imageData,setImageData]=useState()
+    const [imageData,setImageData]=useState(null)
     const {category}=useParams()
     
 const query = qs.stringify(
@@ -45,43 +45,15 @@ const query = qs.stringify(
 );
 
 
-function getTheData(){
+const getTheData=()=>{
   //const categoryValue=category.toLowerCase()
   const placeHolderValue=category ? '': 'wallpapers'
      fetch(`http://localhost:1337/api/posts?${query}`)
           .then(response => response.json())
           .then(ImagesList => {
             //console.log(ImagesList)
-            const dataOfImages= ImagesList.data.map((image)=>{
-            return {
-              likes : image.attributes.likes.data.map((like)=>{
-                return like.id
-              }),
-              section : image.attributes.section.data.attributes.Section,
-              Description : image.attributes.Description,
-              userData : {
-               userName: image.attributes.userlist.data.attributes.username,
-               email : image.attributes.userlist.data.attributes.email ,
-               profileUrl : `http://localhost:1337${image.attributes.userlist.data.attributes.profileImage.data.attributes.url}`,
-               id : image.attributes.userlist.data.id
-              },
-              id:image.id,
-              comments : image.attributes.comments.data.map((commentData)=>{
-                return {
-                  Comment: commentData.attributes.Comment,
-                  user: {
-                      name : commentData.attributes.userlist.data.attributes.username,
-                      email : commentData.attributes.userlist.data.attributes.email
-                      }
-                }
-              }),
-              imageUrl : { 
-                id:image.attributes.Image.data.id,
-                url:`http://localhost:1337${image.attributes.Image.data.attributes.url}`
-              }}
-          })
-         
-          setImageData(dataOfImages)
+            localStorage.setItem("imagesList",JSON.stringify(ImagesList))
+            setImageData(ImagesList)
           })
          .catch(error => {
           console.error('Error fetching data:', error);
@@ -93,9 +65,13 @@ useEffect(()=>{
   setLoading(false)
 },[])
 
+useEffect(()=>{
+  console.log(imageData)
+},[imageData])
+
 return (
     <div className='flex flex-col items-center w-full '>
-     { loading ?<Spinner message={'We need to load the content , wait for it'}/>:
+     { !imageData ?<Spinner message={'We need to load the content , wait for it'}/>:
       <MasonaryLayout imageDetails={imageData}/>
      } 
     </div>

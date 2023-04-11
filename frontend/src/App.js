@@ -6,15 +6,12 @@ import {Login,Home,Pins, Userprofile} from './components/index'
 
 
 
-
 const App = () => {
   return (
     <Routes>
         <Route path="login" element={<Login/>} />
         <Route path="/*" element={<Home/>} />
-        
         <Route path="user-profile/*" element={<Userprofile/>} />
-        
     </Routes>
   )
 }

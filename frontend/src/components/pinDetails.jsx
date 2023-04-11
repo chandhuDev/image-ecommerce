@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation,useParams } from 'react-router-dom'
 import { ViewFeed } from './index'
+import {Spinner} from './index'
 import qs from 'qs'
 
 const PinDetails=()=>{
@@ -12,6 +13,7 @@ const PinDetails=()=>{
   const [comment,setComment]=useState('')
   const data = locate.state && locate.state.detail
   const [likes,setLikes]=useState(data?.likes?.length)
+  const [allPostData,setAllPostData]=useState(null)
   const [postData,setPostData]=useState()
   
   const likeExist=data.likes.includes(data.userData.id)
@@ -30,7 +32,6 @@ const PinDetails=()=>{
    updatedPostWithLike={
     userlist:userId
    }
-   
     setPostWithComment(updatedPostWithComment)
     setPostWithLike(updatedPostWithLike)
    }
@@ -38,8 +39,7 @@ const PinDetails=()=>{
   else if(comment&&comment.length>0){
     updatedPostWithComment={
       Comment:comment
-    
-   }
+    }
    setPostWithComment(updatedPostWithComment)
   }
    
@@ -54,12 +54,15 @@ const updateData = async () => {
    const likeForm=new FormData()
    commentForm.append("data",JSON.stringify(postWithComment))
    likeForm.append("data",JSON.stringify(postWithLike))
-    const [response1, response2] = await Promise.all([
+    const [response1, response2,response3] = await Promise.all([
       fetch('http://localhost:1337/api/comments', { method: 'POST', body: commentForm }),
       fetch('http://localhost:1337/api/likes', { method: 'POST', body:  likeForm}),
+      fetch('http://localhost:1337/api/posts', { method: 'GET'}),
       ])
       const result1 = await response1.json();
       const result2 = await response2.json();
+      const result3 = await response3.json()
+      setAllPostData(result3)
       console.log('Result 1:', result1);
       console.log('Result 2:', result2);
       let updateData={
@@ -74,7 +77,7 @@ const updateData = async () => {
     });
     const updatedData = await response.json();
     setLikes(updatedData.data.attributes.likes?.length)
-    setPostData(updatedData)
+    //setPostData(updatedData)
     if (!response.ok) {
       throw new Error(updatedData.message);
     }
@@ -125,25 +128,11 @@ const getPostData= ()=>{
   fetch(`http://localhost:1337/api/posts/${id}?${query}`)
           .then(response => response.json())
           .then(ImageData => {
-           // console.log(ImageData)
-            setPostData(ImageData)
+           setPostData(ImageData)
             })
          .catch(error => {
           console.error('Error fetching data:', error);
           });
-  // try{
-  //  const response=await fetch(`http://localhost:1337/api/posts/${id}?${query}`)
-  //  const responseData=await response.json()
-  //  if (!responseData.ok) {
-  //   throw new Error(responseData.message);
-  // }
-  //   console.log("response data from strapi",responseData)
-  //   setPostData(responseData)
-  //   console.log(responseData)
-  // }
-  // catch(e){
-  //   console.log("error in fetching",e.message)
-  // }
 }
 
 useEffect(()=>{
@@ -176,7 +165,7 @@ return (
         </div>
       </div>    
      </div>
-     {/* <ViewFeed imageData={data}/> */}
+      <ViewFeed imageDetails={allPostData}/> 
     </>
 )
 }

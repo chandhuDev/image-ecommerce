@@ -8,14 +8,12 @@ import { Sidebar,Userprofile,Pins } from './index'
 import logo from '../assests/logo.png'
 import favicon from '../assests/favicon.png'
 
+
 const HomeRoute = () => {
   
   const userDetails=localStorage.getItem('user')!=undefined ? localStorage.getItem('user'):{}
-  const userObject=JSON.parse(userDetails)
-  const [images,setImages]=useState([])
-  const [user,setUser]=useState(userObject)
-  const userPicture=userObject.picture ? userObject.picture : favicon
-  const [pic,setPic]=useState(userPicture)
+  const user=JSON.parse(userDetails)
+  
   const [toggleSideBar,settoggleSideBar]=useState(false)
   const scrollRef=useRef(null)
 
@@ -40,7 +38,7 @@ useEffect(()=>{
             <img src={logo} alt="logo" className="w-28" />
           </Link>
           <Link to={`user-profile/${user.sub}`}>
-          <img src={pic} alt="logo"  className='ml-1 w-14 rounded-full '/>
+          <img src={user.picture} alt="logo"  className='ml-1 w-14 rounded-full '/>
           </Link>
         </div>
         {toggleSideBar && (

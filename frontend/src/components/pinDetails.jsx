@@ -165,7 +165,7 @@ return (
         </div>
       </div>    
      </div>
-      <ViewFeed imageDetails={allPostData}/> 
+      <ViewFeed /> 
     </>
 )
 }

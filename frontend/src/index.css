@@ -5,3 +5,11 @@
 .scrollbar::-webkit-scrollbar{
     display:none;
 }
+
+button:focus {
+    outline: none;
+  }
+  
+  button:active {
+    transform: translateY(1px);
+  }

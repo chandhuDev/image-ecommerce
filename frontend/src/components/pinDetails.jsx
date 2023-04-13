@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation,useParams } from 'react-router-dom'
 import { Spinner,CommentLayout } from './index'
-
 import qs from 'qs'
 
 const PinDetails=()=>{
@@ -9,31 +8,36 @@ const PinDetails=()=>{
   const {id}=useParams()
   const locate=useLocation()
   const [postWithComment,setPostWithComment]=useState()
-  const [postWithLike,setPostWithLike]=useState()
+ // const [postWithLike,setPostWithLike]=useState()
   const [comment,setComment]=useState('')
   const data = locate.state && locate.state.detail
+ // console.log(data.likes.length)
+  //console.log(data.likes.data.length)
   const [likes,setLikes]=useState(data?.likes?.length)
   const [allPostData,setAllPostData]=useState(null)
   const [postData,setPostData]=useState(null)
+  const userIdinJson=localStorage.getItem('userDataId')
+  const userId=JSON.parse(userIdinJson)
+  console.log("likes in pinDetails",likes)
   
   const likeExist=data.likes.includes(data.userData.id)
-  
+  //setLike(likeExist)
   let updatedPostWithComment={}  
-  let updatedPostWithLike={}  
+  //let updatedPostWithLike={}  
  function setLikeFunc(){
   setLike(!like)
   const userlist=localStorage.getItem('userDataId')
   const userId=JSON.parse(userlist)
-  console.log(userId)
+  console.log("userId",userId)
   if(comment&&comment.length>0&&like){
    updatedPostWithComment={
     Comment:comment,
    }
-   updatedPostWithLike={
-    userlist:userId
-   }
+  //  updatedPostWithLike={
+  //   userlist:userId
+  //  }
     setPostWithComment(updatedPostWithComment)
-    setPostWithLike(updatedPostWithLike)
+    //setPostWithLike(updatedPostWithLike)
    }
   
   else if(comment&&comment.length>0){
@@ -73,20 +77,20 @@ const updateData = async () => {
    const commentForm=new FormData()
    const likeForm=new FormData()
    commentForm.append("data",JSON.stringify(postWithComment))
-   likeForm.append("data",JSON.stringify(postWithLike))
-    const [response1, response2,response3] = await Promise.all([
+  // likeForm.append("data",JSON.stringify(postWithLike))
+    const [response1, response3] = await Promise.all([
       fetch('http://localhost:1337/api/comments', { method: 'POST', body: commentForm }),
-      fetch('http://localhost:1337/api/likes', { method: 'POST', body:  likeForm}),
+     // fetch('http://localhost:1337/api/likes', { method: 'POST', body:  likeForm}),
       fetch('http://localhost:1337/api/posts', { method: 'GET'}),
       ])
       const result1 = await response1.json();
-      const result2 = await response2.json();
+     // const result2 = await response2.json();
       const result3 = await response3.json()
       setAllPostData(result3)
       console.log('Result 1:', result1);
-      console.log('Result 2:', result2);
+      //console.log('Result 2:', result2);
       let updateData={
-        likes: result2.data.id,
+        likes: userId,
         comments: result1.data.id,
       }
       const newFormData=new FormData()
@@ -96,7 +100,7 @@ const updateData = async () => {
       body: newFormData,
     });
     const updatedData = await response.json();
-    setLikes(updatedData.data.attributes.likes?.length)
+    
     //setPostData(updatedData)
     if (!response.ok) {
       throw new Error(updatedData.message);
@@ -115,8 +119,9 @@ const getPostData= ()=>{
           .then(response => response.json())
           .then(ImageData => {
            setPostData(ImageData)
-           console.log("ImageData",ImageData)
-            })
+           setLikes(ImageData.data.attributes.likes.length)
+           console.log("ImageData",ImageData.data.attributes.likes.data.length)
+           })
          .catch(error => {
           console.error('Error fetching data:', error);
           });

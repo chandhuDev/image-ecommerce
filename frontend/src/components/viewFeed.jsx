@@ -47,7 +47,7 @@ const query=qs.stringify(
 
 
 const ViewFeed = () => {
-  const [showComponent1, setShowComponent1] = useState(false);
+  const [showComponent1, setShowComponent1] = useState(true);
   const [userData,setUserData]=useState()
   const imagesList=localStorage.getItem('imagesList')
   const images=JSON.parse(imagesList)
@@ -62,20 +62,23 @@ const ViewFeed = () => {
 
  const resultComponent= userData ? <MasonaryLayout imageDetails={userData} />: <Spinner message={'We need to load the content , wait for it'}/>
 
+ console.log("userData in viewfeed",userData)
+
+
 
 
  useEffect(()=>{
  async function fetchUserCreatedPins(){
   try{
-    const response=await fetch(`http://localhost:1337/api/userlists?filters[username][$eq]=kalyan&${query}`)
+    const response=await fetch(`http://localhost:1337/api/userlists?filters[username][$eq]=${user.name}&${query}`)
     const resultData=await response.json()
-    console.log(resultData)
+    console.log("data in view feed",resultData)
     const dataList=resultData.data[0].attributes.posts.data.map((image)=>{
       return {
         likes : image.attributes.likes ? image.attributes.likes.data.map((like)=>{
           return like.id
         }) : '',
-        section : image.attributes.section.data.attributes.Section,
+        section : image.attributes.section.data.attributes.section,
         Description : image.attributes.Description ,
         userData : {
          userName:  user.name ,
@@ -104,6 +107,7 @@ const ViewFeed = () => {
     }
     
     setUserData(dataList)
+   // console.log("after fetching in view feed",dataList)
   }
   catch(e){
     console.log("In viewfeed",e)
@@ -112,9 +116,18 @@ const ViewFeed = () => {
  fetchUserCreatedPins()
  },[])
 
- useEffect(()=>{
-console.log("userData in viewfeed",userData)
- },[userData])
+//  useEffect(()=>{
+// console.log("userData in viewfeed",userData)
+//  },[userData])
+
+if(userData&&userData.length==0){
+  return <div>
+  <div className='w-full h-full bg-slate-400 flex justify-center items-center mx-auto px-4 py-8'>
+    <h2 className='fornt-bold text-2xl font-serif'>yet to create a Image pin by you...</h2>
+  </div>
+</div>
+}
+
 
   return (
     <>

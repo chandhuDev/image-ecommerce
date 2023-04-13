@@ -40,10 +40,10 @@ const pushUserData = async (userObject) => {
       throw new Error(updatedPost.message);
     }
     localStorage.setItem('userDataId',JSON.stringify(updatedPost.data.id))
-    console.log(updatedPost)
+    console.log("user logged In data",updatedPost)
     return 
   } catch (error) {
-    console.error('Error updating data:', error.message);
+    console.error('Error logging the user to strapi:', error);
   }
 };
 

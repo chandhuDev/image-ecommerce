@@ -69,7 +69,7 @@ const getTheData=()=>{
                   likes : image.attributes.likes ? image.attributes.likes.data.map((like)=>{
                     return like.id
                   }) : '',
-                  section : image.attributes.section.data.attributes.Section,
+                  section : image.attributes.section.data.attributes.section,
                   Description : image.attributes.Description ,
                   userData : {
                    userName:  image.attributes.userlist.data.attributes.username ,

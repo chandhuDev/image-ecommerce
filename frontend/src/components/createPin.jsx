@@ -5,7 +5,7 @@ import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { categories } from '../utils/dataUtils';
-import qs from 'qs'
+
 
 const CreatePin = () => {
   const [loading,setLoading]=useState(false)
@@ -20,7 +20,8 @@ const CreatePin = () => {
   
  const userData=localStorage.getItem('user')
  const user=JSON.parse(userData)
- 
+ const userIdinJson=localStorage.getItem('userDataId')
+ const userId=JSON.parse(userIdinJson)
 
   const uploadImage = (e) => {
     const selectedFile = e.target.files[0]
@@ -51,7 +52,7 @@ const CreatePin = () => {
 const postData = async (pinDetails) => {
     try {
       const [response1, response2] = await Promise.all([
-        fetch(`http://localhost:1337/api/userlists?filters[email][$eq]=${user.email}&populate=*`),
+        fetch(`http://localhost:1337/api/userlists?filters[username][$eq]=${user.name}&populate=*`),
         fetch(`http://localhost:1337/api/sections?filters[Section][$eq]=${category}&populate=*`)
       ]);
       const data1 = await response1.json();
@@ -68,17 +69,27 @@ const postData = async (pinDetails) => {
       for (const [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
-      const response3 = await fetch(`http://localhost:1337/api/posts`, {
+      const response3= await
+        fetch(`http://localhost:1337/api/posts`, {
         method: 'POST', 
         body: formData,
-      });
-      const createdData = await response3.json();
+      })
+       const createdData = await response3.json();
       if (!response3.ok) {
         throw new Error(createdData.message);
       }
       console.log('createdData successful:', createdData);
+      const createdPinId=createdData?.data?.id
+      const postIdData=FormData()
+      postIdData.append("data",JSON.stringify(createdPinId))
+      const response4= await fetch(`http://localhost:1337/api/userlists/${userId}`,{
+        method:'PUT',
+        body: postIdData,
+       })
+       const resultData=await response4.json()
+      console.log("updated Pin after fetch",resultData)
       } catch (error) {
-      console.error('Error updating data:', error);
+      console.error('Error in creating the data Image:', error);
     }
   };
 
@@ -122,7 +133,7 @@ const postData = async (pinDetails) => {
             ) : (
               <div className="relative h-full">
                 <img
-                  src={imageAsset}
+                  src={URL.createObjectURL(imageAsset)}
                   alt="uploaded-pic"
                   className="h-full object-cover w-3/4"
                 />
@@ -148,8 +159,13 @@ const postData = async (pinDetails) => {
               <p className="font-bold">{user.name}</p>
             </div>
           )}
+          <label htmlFor="description" className="block text-gray-700 font-medium mb-2">
+             Description
+          </label>
           <input
             type="text"
+            id="description"
+            name="description"
             value={about}
             onChange={(e) => setAbout(e.target.value)}
             placeholder="Tell everyone what your Pin is about"

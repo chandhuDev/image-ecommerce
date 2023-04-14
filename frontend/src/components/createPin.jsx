@@ -42,7 +42,7 @@ const CreatePin = () => {
       setSaved(!saved)
       let pinDetails ={}
       postData(pinDetails)
-      navigate('/');
+      // navigate('/');
     } else {
        throw new Error("Error in saving the pin , Check all fields are filled once")
       }
@@ -80,7 +80,7 @@ const postData = async (pinDetails) => {
       }
       console.log('createdData successful:', createdData);
       const createdPinId=createdData?.data?.id
-      const postIdData=FormData()
+      const postIdData=new FormData()
       postIdData.append("data",JSON.stringify(createdPinId))
       const response4= await fetch(`http://localhost:1337/api/userlists/${userId}`,{
         method:'PUT',
@@ -159,7 +159,7 @@ const postData = async (pinDetails) => {
               <p className="font-bold">{user.name}</p>
             </div>
           )}
-          <label htmlFor="description" className="block text-gray-700 font-medium mb-2">
+          <label htmlFor="description" className="block text-gray-700 font-medium">
              Description
           </label>
           <input

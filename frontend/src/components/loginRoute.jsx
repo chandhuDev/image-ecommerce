@@ -13,7 +13,6 @@ const LoginRoute = () => {
      const onSuccess=(response) => {
      const userObject = jwt_decode(response.credential);
      pushUserData(userObject)
-     localStorage.setItem('user', JSON.stringify(userObject));
      if(localStorage.getItem('user')){
       navigate('/')
      }
@@ -23,6 +22,7 @@ const LoginRoute = () => {
 const pushUserData = async (userObject) => {
    try{
       const myImage = await fetch(userObject.picture);
+      console.log("user Picture ",myImage)
       const myBlob = await myImage.blob();
       const userData={
         email:userObject.email,
@@ -40,7 +40,8 @@ const pushUserData = async (userObject) => {
       throw new Error(updatedPost.message);
     }
     localStorage.setItem('userDataId',JSON.stringify(updatedPost.data.id))
-    console.log("user logged In data",updatedPost)
+    localStorage.setItem('user', JSON.stringify(userObject));
+    
     return 
   } catch (error) {
     console.error('Error logging the user to strapi:', error);

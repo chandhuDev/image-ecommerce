@@ -8,36 +8,31 @@ const PinDetails=()=>{
   const {id}=useParams()
   const locate=useLocation()
   const [postWithComment,setPostWithComment]=useState()
- // const [postWithLike,setPostWithLike]=useState()
+
   const [comment,setComment]=useState('')
   const data = locate.state && locate.state.detail
- // console.log(data.likes.length)
-  //console.log(data.likes.data.length)
-  const [likes,setLikes]=useState(data?.likes?.length)
-  const [allPostData,setAllPostData]=useState(null)
+ 
+
+  const [likes,setLikes]=useState()
+ 
   const [postData,setPostData]=useState(null)
   const userIdinJson=localStorage.getItem('userDataId')
   const userId=JSON.parse(userIdinJson)
   console.log("likes in pinDetails",likes)
   
   const likeExist=data.likes.includes(data.userData.id)
-  //setLike(likeExist)
+  
   let updatedPostWithComment={}  
-  //let updatedPostWithLike={}  
+   
  function setLikeFunc(){
   setLike(!like)
-  const userlist=localStorage.getItem('userDataId')
-  const userId=JSON.parse(userlist)
-  console.log("userId",userId)
   if(comment&&comment.length>0&&like){
    updatedPostWithComment={
     Comment:comment,
    }
-  //  updatedPostWithLike={
-  //   userlist:userId
-  //  }
+  
     setPostWithComment(updatedPostWithComment)
-    //setPostWithLike(updatedPostWithLike)
+    
    }
   
   else if(comment&&comment.length>0){
@@ -75,20 +70,15 @@ const updateData = async () => {
   try {
    const postId=id
    const commentForm=new FormData()
-   const likeForm=new FormData()
+   
    commentForm.append("data",JSON.stringify(postWithComment))
-  // likeForm.append("data",JSON.stringify(postWithLike))
-    const [response1, response3] = await Promise.all([
-      fetch('http://localhost:1337/api/comments', { method: 'POST', body: commentForm }),
-     // fetch('http://localhost:1337/api/likes', { method: 'POST', body:  likeForm}),
-      fetch('http://localhost:1337/api/posts', { method: 'GET'}),
-      ])
+  
+    const response1 = await fetch('http://localhost:1337/api/comments', { method: 'POST', body: commentForm })
+     
       const result1 = await response1.json();
-     // const result2 = await response2.json();
-      const result3 = await response3.json()
-      setAllPostData(result3)
+     
       console.log('Result 1:', result1);
-      //console.log('Result 2:', result2);
+     
       let updateData={
         likes: userId,
         comments: result1.data.id,
@@ -101,7 +91,7 @@ const updateData = async () => {
     });
     const updatedData = await response.json();
     
-    //setPostData(updatedData)
+    
     if (!response.ok) {
       throw new Error(updatedData.message);
     }
@@ -120,7 +110,8 @@ const getPostData= ()=>{
           .then(ImageData => {
            setPostData(ImageData)
            setLikes(ImageData.data.attributes.likes.length)
-           console.log("ImageData",ImageData.data.attributes.likes.data.length)
+           
+           
            })
          .catch(error => {
           console.error('Error fetching data:', error);

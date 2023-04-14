@@ -48,24 +48,14 @@ const query = qs.stringify(
 
 
 const getTheData=()=>{
-  const url=category ? `http://localhost:1337/api/posts?filters[section][Section][$eq]=${categoryValue}&${query}`:`http://localhost:1337/api/posts?${query}`
+  const url=category ? `http://localhost:1337/api/posts?filters[section][Section][$eq]=${categoryValue}&${query}&pagination[page]=1&pagination[pageSize]=5`:`http://localhost:1337/api/posts?${query}&pagination[page]=1&pagination[pageSize]=5`
     
         fetch(url)
           .then(response => response.json())
           .then(ImagesList => {
-            console.log(ImagesList)
+            
             const dataOfImages= ImagesList.data.map((image)=>{
-              
-              // let iteratedValue={}
-              // const description= image.attributes.Description && image.attributes.Description
-              // const imageData=image.attributes.Image.data&&image.attributes.Image.data
-              // const profileUrl=image.attributes.userlist.data.attributes.profileImage.data.attributes.url && image.attributes.userlist.data.attributes.profileImage.data.attributes.url
-              // const userEmail=image.attributes.userlist.data.attributes.email&&image.attributes.userlist.data.attributes.email
-              // const username=image.attributes.userlist.data.attributes.username&&image.attributes.userlist.data.attributes.username
-              
-              //if(description&&imageData&&profileUrl&&userEmail&&username){
-                //console.log(image)
-                return {
+              return {
                   likes : image.attributes.likes ? image.attributes.likes.data.map((like)=>{
                     return like.id
                   }) : '',
@@ -93,10 +83,10 @@ const getTheData=()=>{
                   }}
               }
                
-              //return iteratedValue
+              
             )
             localStorage.setItem("imagesList",JSON.stringify(dataOfImages))
-           // console.log("data of Images",dataOfImages)
+           
             setImageData(dataOfImages)
           })
          .catch(error => {
@@ -107,7 +97,7 @@ const getTheData=()=>{
 useEffect(()=>{
   getTheData()
   setLoading(false)
-},[])
+},[category])
 
 useEffect(()=>{
   console.log(imageData)

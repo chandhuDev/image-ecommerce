@@ -72,7 +72,7 @@ const ViewFeed = () => {
   try{
     const response=await fetch(`http://localhost:1337/api/userlists?filters[username][$eq]=${user.name}&${query}`)
     const resultData=await response.json()
-    console.log("data in view feed",resultData)
+    
     const dataList=resultData.data[0].attributes.posts.data.map((image)=>{
       return {
         likes : image.attributes.likes ? image.attributes.likes.data.map((like)=>{
@@ -116,9 +116,6 @@ const ViewFeed = () => {
  fetchUserCreatedPins()
  },[])
 
-//  useEffect(()=>{
-// console.log("userData in viewfeed",userData)
-//  },[userData])
 
 if(userData&&userData.length==0){
   return <div>

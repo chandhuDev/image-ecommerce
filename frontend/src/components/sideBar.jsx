@@ -21,8 +21,13 @@ const categoryArray=[
   {name:'Fashion-Beauty'}
 ]
 
-const sideBar = ({user,closeToggle}) => {
+const sideBar = ({closeToggle}) => {
   
+  const userPicture=localStorage.getItem('googlePicture')
+  const userInfo=localStorage.getItem('user')
+  const user=JSON.parse(userInfo)
+
+
   const handleCloseSideBar=()=>{
     if(closeToggle) closeToggle(false)
   }
@@ -58,8 +63,8 @@ return (
         onClick={handleCloseSideBar}
         >
           <div className="flex my-5 mb-3 gap-2 p-2 items-center bg-white  rounded-lg shadow-lg mx-2">
-          <img src={user.picture} alt="user-profile" className='w-8 h-8 rounded-full'/>
-          <p className='text-center'>{user.name}</p>
+          <img src={userPicture} alt="user-profile" className='w-8 h-8 rounded-full'/>
+          <p className='text-center'>{user.username}</p>
           </div>
          </Link>
       )}

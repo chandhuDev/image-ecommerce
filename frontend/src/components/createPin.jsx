@@ -66,9 +66,6 @@ const postData = async (pinDetails) => {
       
       formData.append("data",JSON.stringify(pinDetails))
       formData.append("files.Image",imageAsset,"imagePost.png")
-      for (const [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
       const response3= await
         fetch(`http://localhost:1337/api/posts`, {
         method: 'POST', 
@@ -78,7 +75,6 @@ const postData = async (pinDetails) => {
       if (!response3.ok) {
         throw new Error(createdData.message);
       }
-      console.log('createdData successful:', createdData);
       const createdPinId=createdData?.data?.id
       const postIdData=new FormData()
       postIdData.append("data",JSON.stringify(createdPinId))
@@ -87,7 +83,7 @@ const postData = async (pinDetails) => {
         body: postIdData,
        })
        const resultData=await response4.json()
-      console.log("updated Pin after fetch",resultData)
+      
       } catch (error) {
       console.error('Error in creating the data Image:', error);
     }

@@ -106,7 +106,7 @@ useEffect(()=>{
 return (
     <div className='flex flex-col items-center w-full '>
      { !imageData ?<Spinner message={'We need to load the content , wait for it'}/>:
-      <MasonaryLayout imageDetails={imageData}/>
+      <MasonaryLayout imageDetails={imageData} />
      } 
     </div>
   )

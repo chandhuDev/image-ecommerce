@@ -12,7 +12,7 @@ const breakPoints={
 }
 
 const masonaryLayout = ({imageDetails}) => {
-  //console.log(imageDetails)
+  
 return (
   <Masonary breakpointCols={breakPoints} className='flex w-full h-full  gap-6 overflow-x-hidden overflow-y-hidden duration-300 animate-slide-fwd'>
       {imageDetails?.map((image)=>{

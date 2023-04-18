@@ -9,8 +9,6 @@ const commentArray=comments.data.attributes.comments.data.map((comment)=>{
     }
 })
    
-console.log("commentArray",commentArray)
-
 if(commentArray.length===0){
   return <div>
      <div className='w-full h-full bg-slate-400 flex justify-center items-center mx-auto px-4 py-8'>

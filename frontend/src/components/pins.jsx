@@ -4,13 +4,13 @@ import {Navbar,Feed,Search,PinDetails,CreatePin} from './index'
 
 
 
-const Pins = ({user}) => {
+const Pins = () => {
   const [search,setSearch]=useState('')
 
   return (
     <div className='px-2'>
       <div className=''>
-         <Navbar search={search} setSearch={setSearch} user={user&&user}/>
+         <Navbar search={search} setSearch={setSearch}/>
       </div>
       <div className='h-full'>
           <Routes>

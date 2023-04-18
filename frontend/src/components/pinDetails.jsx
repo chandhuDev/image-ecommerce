@@ -8,7 +8,6 @@ const PinDetails=()=>{
   const {id}=useParams()
   const locate=useLocation()
   const [postWithComment,setPostWithComment]=useState()
-
   const [comment,setComment]=useState('')
   const data = locate.state && locate.state.detail
  
@@ -18,7 +17,7 @@ const PinDetails=()=>{
   const [postData,setPostData]=useState(null)
   const userIdinJson=localStorage.getItem('userDataId')
   const userId=JSON.parse(userIdinJson)
-  console.log("likes in pinDetails",likes)
+  
   
   const likeExist=data.likes.includes(data.userData.id)
   
@@ -68,24 +67,19 @@ const PinDetails=()=>{
 
 const updateData = async () => {
   try {
-   const postId=id
    const commentForm=new FormData()
-   
    commentForm.append("data",JSON.stringify(postWithComment))
-  
-    const response1 = await fetch('http://localhost:1337/api/comments', { method: 'POST', body: commentForm })
+   const response1 = await fetch('http://localhost:1337/api/comments', { method: 'POST', body: commentForm })
+   const result1 = await response1.json();
      
-      const result1 = await response1.json();
-     
-      console.log('Result 1:', result1);
-     
-      let updateData={
+      
+   let updateData={
         likes: userId,
         comments: result1.data.id,
-      }
+    }
       const newFormData=new FormData()
      newFormData.append("data",JSON.stringify(updateData))
-    const response = await fetch(`http://localhost:1337/api/posts/${postId}`, {
+    const response = await fetch(`http://localhost:1337/api/posts/${id}`, {
       method: 'PUT', 
       body: newFormData,
     });
@@ -95,7 +89,7 @@ const updateData = async () => {
     if (!response.ok) {
       throw new Error(updatedData.message);
     }
-    console.log('Update successful:', updatedData);
+    
   } catch (error) {
     console.error('Error updating data:', error.message);
   }

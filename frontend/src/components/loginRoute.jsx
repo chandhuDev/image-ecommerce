@@ -4,6 +4,12 @@ import video from '../assests/share.mp4'
 import logo from '../assests/logo.png'
 
 const LoginRoute = () => {
+
+  function goggleButton(){
+    window.open(`http://localhost:5000/user/google/callback`,"_self");
+  }
+
+
   return (
     <div className='h-screen'>
      <div className="relative w-full h-full" >
@@ -14,17 +20,11 @@ const LoginRoute = () => {
                <img src={logo} alt="shareme-logo"  width="100px"/>
             </div>
           <div className='mt-4 '>
-              <a 
-              href='http://localhost:1337/api/connect/google'
-              target='_blank'
-              rel='nonreference'
-              className='text-black font-xl font-serif flex justify-center items-center border rounded-md bg-slate-300'>
-              Connect to google 
-              <span className='ml-2 text-center'>
-                <FcGoogle />
-              </span>
-              </a>
-           </div>
+            <button className='text-black font-xl font-serif flex justify-center items-center border rounded-md bg-slate-300' onClick={goggleButton}>
+                <FcGoogle className='w-6 h-6'/>
+                <span className='ml-2'>Login with Google</span>
+            </button>
+          </div>
           </div>
       </div>
     </div> 

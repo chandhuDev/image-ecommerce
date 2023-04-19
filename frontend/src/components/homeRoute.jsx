@@ -2,7 +2,7 @@ import React from 'react'
 import {HiMenu } from 'react-icons/hi'
 import { AiFillCloseCircle} from 'react-icons/ai'
 import { useState ,useRef,useEffect} from 'react'
-import {Link,Route,Routes} from 'react-router-dom'
+import {Link,Route,Routes,useParams} from 'react-router-dom'
 import { Sidebar,Userprofile,Pins } from './index'
 import logo from '../assests/logo.png'
 
@@ -13,6 +13,24 @@ const HomeRoute = () => {
   const scrollRef=useRef(null)
   const userDetails=localStorage.getItem('user') 
   const user=JSON.parse(userDetails)
+  const [user1,setUser1]=useState()
+  const {id}=useParams()
+  const getUser=()=>{
+    fetch(`http://localhost:5000/user/getUserInfo/${id}`)
+      .then(response=>response.json())
+      .then(data=>{
+      setUser1(data)
+    }).catch(err=>{
+      console.log(err)
+    })
+  }
+
+useEffect(()=>{
+ getUser()
+},[id])
+
+
+
   useEffect(()=>{
    scrollRef.current.scrollTo(0,0)
   },[])

@@ -53,7 +53,7 @@ const getTheData=()=>{
         fetch(url)
           .then(response => response.json())
           .then(ImagesList => {
-            
+            console.log("imageList",ImagesList)
             const dataOfImages= ImagesList.data.map((image)=>{
               return {
                   likes : image.attributes.likes ? image.attributes.likes.data.map((like)=>{

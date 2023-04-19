@@ -18,10 +18,10 @@ const CreatePin = () => {
   
   const navigate=useNavigate()
   
- const userData=localStorage.getItem('user')
- const user=JSON.parse(userData)
- const userIdinJson=localStorage.getItem('userDataId')
- const userId=JSON.parse(userIdinJson)
+  const userPicture=localStorage.getItem('googlePicture')
+  const userInfo=localStorage.getItem('user')
+  const user=JSON.parse(userInfo)
+
 
   const uploadImage = (e) => {
     const selectedFile = e.target.files[0]
@@ -51,38 +51,36 @@ const CreatePin = () => {
 
 const postData = async (pinDetails) => {
     try {
-      const [response1, response2] = await Promise.all([
-        fetch(`http://localhost:1337/api/userlists?filters[username][$eq]=${user.name}&populate=*`),
-        fetch(`http://localhost:1337/api/sections?filters[Section][$eq]=${category}&populate=*`)
-      ]);
+      const response1 = await fetch(`http://localhost:1337/api/sections?filters[Section][$eq]=${category}&populate=*`)
       const data1 = await response1.json();
-      const data2 = await response2.json();
       const formData=new FormData()
       pinDetails={
         Description:about,
-        section:data2.data[0].id,
-        userlist:data1.data[0].id
+        section:data1.data[0].id,
+        userlist:user.id
       }
-      
       formData.append("data",JSON.stringify(pinDetails))
       formData.append("files.Image",imageAsset,"imagePost.png")
-      const response3= await
+      const response2= await
         fetch(`http://localhost:1337/api/posts`, {
         method: 'POST', 
         body: formData,
       })
-       const createdData = await response3.json();
-      if (!response3.ok) {
+       const createdData = await response2.json();
+      if (!response2.ok) {
         throw new Error(createdData.message);
       }
-      const createdPinId=createdData?.data?.id
+      const createdPinId={
+        posts:createdData?.data?.id
+      }
       const postIdData=new FormData()
       postIdData.append("data",JSON.stringify(createdPinId))
-      const response4= await fetch(`http://localhost:1337/api/userlists/${userId}`,{
+      const response4= await fetch(`http://localhost:1337/api/userlists/${user.id}`,{
         method:'PUT',
         body: postIdData,
        })
        const resultData=await response4.json()
+       console.log(resultData)
       
       } catch (error) {
       console.error('Error in creating the data Image:', error);
@@ -93,9 +91,9 @@ const postData = async (pinDetails) => {
   return (
     <>
       <div className='flex flex-col items-center gap-y-10 w-full h-full  bg-slate-400'>
-      <div className=" flex flex-row justify-center items-center bg-red-400  p-4 lg:w-4/5 w-full">
-        <div className="bg-secondaryColor p-3 flex flex-0.7 w-full">
-          <div className=" flex justify-center items-center flex-col border-2 border-dotted border-gray-300 p-3 w-full h-420">
+      <div className=" flex flex-row justify-center items-center p-2 lg:w-4/5 w-full">
+        <div className="bg-secondaryColor p-2 flex flex-0.7 w-full">
+          <div className=" flex justify-center items-center flex-col border-2 border-dotted border-gray-300 p-2 w-full h-420">
             {loading && (
               <Spinner message={'Just wait for a couple of seconds to upload the file'}/>
             )}
@@ -127,7 +125,7 @@ const postData = async (pinDetails) => {
                 />
               </label>
             ) : (
-              <div className="relative h-full">
+              <div className="relative h-full flex flex-col">
                 <img
                   src={URL.createObjectURL(imageAsset)}
                   alt="uploaded-pic"
@@ -135,7 +133,7 @@ const postData = async (pinDetails) => {
                 />
                 <button
                   type="button"
-                  className="absolute bottom-3 right-3 p-3 rounded-full bg-white text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out"
+                  className="absolute bottom-3 right-3 p-2 rounded-full bg-white text-2xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out"
                   onClick={() => setImageAsset(null)}
                 >
                   <MdDelete />
@@ -148,7 +146,7 @@ const postData = async (pinDetails) => {
           {user && (
             <div className="flex gap-2 mt-2 mb-2 items-center bg-white rounded-lg ">
               <img
-                src={user.picture}
+                src={userPicture}
                 className="w-10 h-10 rounded-full"
                 alt="user-profile"
               />

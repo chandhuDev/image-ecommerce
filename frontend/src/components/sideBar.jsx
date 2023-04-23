@@ -1,31 +1,18 @@
 import React from 'react'
 import { NavLink,Link } from 'react-router-dom'
 import {RiHomeFill} from 'react-icons/ri'
-import {IoIosArrowForward} from 'react-icons/io'
 import { categories } from '../utils/dataUtils'
-
 import logo from '../assests/logo.png'
+import {user} from '../utils/dataUtils'
 
 const isNotActiveStyles='flex ietms-center px-5 gap-3 text-gray-500 hover:text-black transition-all duration-200 ease-in-out captialize'
 const isActiveStyles='flex items-center px-5 gap-3 font-bold border-r-2 border-black  transition-all duration-200 ease-in-out uppercase'
 
-const categoryArray=[
-  {name:'Wallpapers'},
-  {name:'Travel'},
-  {name:'Nature'},
-  {name:'Animals'},
-  {name:'Experimental'},
-  {name:'3d-Renders'},
-  {name:'Textures-Patterns'},
-  {name:'Street-Photography'},
-  {name:'Fashion-Beauty'}
-]
+
 
 const sideBar = ({closeToggle}) => {
   
-  const userPicture=localStorage.getItem('googlePicture')
-  const userInfo=localStorage.getItem('user')
-  const user=JSON.parse(userInfo)
+  
 
 
   const handleCloseSideBar=()=>{
@@ -49,7 +36,7 @@ return (
             </NavLink>
             <h3 className='mt-1 px-5 text-lg 2xl:text-xl '>Discover categories</h3>
             {categories.map((category)=>{
-             return ( <NavLink to={`/${category.name}`}className={({isActive})=>{
+             return ( <NavLink to={`/${user._id}/${category.name}`}className={({isActive})=>{
                 return isActive ? isActiveStyles :isNotActiveStyles
               }} onClick={handleCloseSideBar} key={category.name}>
                {category.name}
@@ -57,18 +44,16 @@ return (
             )})}
          </div>
       </div>
-      {user && (
-        <Link to={`user-profile/${user.name}`}
+      <Link to={`user-profile`}
         className="absolute bottom-0"
         onClick={handleCloseSideBar}
         >
           <div className="flex my-5 mb-3 gap-2 p-2 items-center bg-white  rounded-lg shadow-lg mx-2">
-          <img src={userPicture} alt="user-profile" className='w-8 h-8 rounded-full'/>
+          <img src={user.profileImage} alt="user-profile" className='w-8 h-8 rounded-full'/>
           <p className='text-center'>{user.username}</p>
           </div>
          </Link>
-      )}
-    </div>
+      </div>
   )
 }
 

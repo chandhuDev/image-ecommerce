@@ -1,3 +1,11 @@
+import React from "react";
+export const appContext = React.createContext();
+
+
+const userData=localStorage.getItem("userData")
+export const user = JSON.parse(userData)
+
+
 export const categories = [
     {
       name: 'Wallpapers',

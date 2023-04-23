@@ -1,6 +1,4 @@
-import Axios from 'axios'
-
 export default async function getAllPosts(){
-    const response = await Axios.get('http://localhost:5000/post/viewInfo')
-    return response
+    const response = await fetch('http://localhost:5000/post/getAllPosts')
+    return response.json()
 }

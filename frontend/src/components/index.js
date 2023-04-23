@@ -13,4 +13,4 @@ export {default as MasonaryLayout} from './masonaryLayout'
 export {default as Spinner} from './Spinner'
 export {default as Pin} from './Pin'
 export {default as CommentLayout} from './commentPin'
-export {default as LoginRedirect} from './LoginRedirect'
+

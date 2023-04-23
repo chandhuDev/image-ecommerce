@@ -1,14 +1,12 @@
 import React,{useState} from 'react'
 import {Link,useNavigate} from 'react-router-dom'
 import {IoMdSearch,IoMdAddCircle} from 'react-icons/io'
-
+import {user} from '../utils/dataUtils'
 
 const NavBar = () => {
      const [searchData,setSearchData]=useState('')
 
-   const userPicture=localStorage.getItem('googlePicture')
-   const userInfo=localStorage.getItem('user')
-  const user=JSON.parse(userInfo)
+   
 
 const navigate=useNavigate()
 
@@ -16,7 +14,7 @@ const navigate=useNavigate()
 
 
 const handleSearch=()=>{
-  navigate(`/search/${searchData}`)
+  navigate(`/:id/search/${searchData}`)
 }
 
   return (
@@ -25,15 +23,14 @@ const handleSearch=()=>{
          <input type='text' onChange={(e)=> setSearchData(e.target.value)}
          placeholder='Search'
          value={searchData}
-         //onFocus={()=>navigate('/search',{state:{searchValue:searchData}})}
          className='w-11/12 py-1 md:h-4'/>
          <IoMdSearch fontSize={30} className='ml-2 cursor-pointer' onClick={handleSearch}/>
     </div>
     <div className='flex gap-2'>
-       <Link to={`user-profile/${user.username}`}>
-        <img src={userPicture} alt='user' className='w-15 h-15 hidden md:block rounded-full shadow-lg md:w-12 md:h-12 object-cover'/>
+       <Link to={`user-profile/chandhu`}>
+        <img src={user.profileImage} alt='user' className='w-15 h-15 hidden md:block rounded-full shadow-lg md:w-12 md:h-12 object-cover'/>
        </Link>
-       <Link to={`createPin`}>
+       <Link to={`/${user._id}/createPin`}>
        <IoMdAddCircle className='w-10 h-10 md:w-12 md:h-12 md:ml-0'/>
        </Link>
     </div>

@@ -11,12 +11,12 @@ const breakPoints={
   500:2
 }
 
-const masonaryLayout = ({imageDetails}) => {
-  
+const masonaryLayout = ({imageData}) => {
+console.log(imageData)
 return (
   <Masonary breakpointCols={breakPoints} className='flex w-full h-full  gap-6 overflow-x-hidden overflow-y-hidden duration-300 animate-slide-fwd'>
-      {imageDetails?.map((image)=>{
-        return <Pin key={image.id}  url={image.imageUrl.url} userName={image.userData.userName} profileUrl={image.userData.profileUrl} detail={image}/>
+      {imageData?.map((image)=>{
+        return <Pin key={image._id}  image={image}/>
       })}
     </Masonary>
     

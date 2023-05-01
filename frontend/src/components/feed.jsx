@@ -1,49 +1,30 @@
-import React,{useState,useContext, useEffect} from 'react'
+import React,{useContext} from 'react'
 import { useParams } from 'react-router-dom'
 import {MasonaryLayout} from './index'
-import { appContext,user } from '../utils/dataUtils'
-import { getAllPosts } from '../lib/index'
+import AppContext,{ user,categories } from '../utils/dataUtils'
+
+
+
 
 const Feed = () => {
     const {category}=useParams()
     const categoryValue=category&&category.toLowerCase()
-    const [posts1,setPosts]=useState()
-    const categoryPosts={}
-    const {posts}= useContext(appContext)
+    let categoryPosts={}
+    const {posts}= useContext(AppContext)
+    const postForFeed = posts?.filter(post=>post.userId._id!=user._id)
+    const checkSearch=checkCategory(categoryValue)
     
-
-    
-
-
-
-// if(categoryValue){
-    //    categoryPosts=posts.filter(post => post.categoryId.category===categoryValue)
-    // }
-    
-    async function getPosts(){
-     const postDetails=getAllPosts()
-     const postsData=await postDetails
-     setPosts(postsData)
+    function checkCategory(){
+     return categories.some(category=>category.name.toLowerCase()===categoryValue)
     }
 
-    useEffect(()=>{
-       getPosts()
-    },[])
-
-    if(!posts){
-      return null
+    if(categoryValue){
+      categoryPosts=postForFeed?.filter(post => post.categoryId.category===categoryValue)
     }
-  
 
-    const def=posts.filter(post=>
-      
-      post.userId._id!=user._id)
-    
-    
 return (
     <div className='flex flex-col items-center w-full '>
-     <MasonaryLayout  imageData= {posts1}/>
-     
+     <MasonaryLayout  imageData= {category ? categoryPosts :postForFeed}/>
     </div>
   )
 }

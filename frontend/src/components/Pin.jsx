@@ -9,17 +9,14 @@ const Pin = ({image}) => {
     state:{
       image
    }})
-
-
- }
-
- return (
+}
+return (
     <div onClick={()=>getPinDetails()}>
       <div className='flex flex-col rounded-md border-5 shadow-lg m-3  hover:scale-105 duration-150'>
        <img src={`${image.imageUrl}`} loading='lazy' width={180} height={300} alt='image' className='w-full rounded-lg hover:ease-in transition duration-300 object-cover ease-out cursor-pointer'/>
-      <div className='flex flex-row justify-center items-center cursor-pointer '>
-        <img src={`${image.userId.profileImage}`} loading='lazy'  className='rounded-full w-8 h-8 object-fill ml-2 mb-2 mt-1 grow-0'/>
-        <p className='flex justify-start font-semibold grow ml-3 items-center text-xl font-mono'>{image.userId.username}</p>
+      <div className='flex flex-row justify-center items-center cursor-pointer md:mt-3 mt-2'>
+        <img src={`${image.userId.profileImage}`} loading='lazy'  className='rounded-full md:w-8 md:h-8 w-4 h-4 object-fill md:ml-2 md:mb-2  grow-0'/>
+        <p className='flex justify-start font-semibold grow md:ml-3 ml-1 items-center md:text-xl text-sm font-mono '>{image.userId.username}</p>
       </div>    
     </div>
     </div>

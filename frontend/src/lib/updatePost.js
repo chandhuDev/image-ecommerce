@@ -1,11 +1,13 @@
-import Axios from 'axios'
-
-export default async function updatePost({comment,postId,like,userId}){
-    const response = await Axios.put(`http://localhost:5000/post/update`,{
-        "comment":comment,
-        "postId":postId,
-        "like":like,
-        "userId":userId
-    })
-    return response
+export default async function updatePost(data){
+  const response= await fetch('http://localhost:5000/post/update', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+     body: JSON.stringify(data)
+   })
+   if(!response.ok){
+    throw new Error(response.message)
+    }
+    return response.json()
 }

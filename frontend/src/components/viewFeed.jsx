@@ -1,21 +1,38 @@
-import React,{useState,useContext} from 'react'
-import { MasonaryLayout,Spinner } from './index'
-import { appContext } from '../utils/dataUtils'
-import { useParams } from 'react-router-dom'
+import React,{useState,useContext,useEffect} from 'react'
+import { MasonaryLayout } from './index'
+import AppContext ,{user} from '../utils/dataUtils'
+import { getAllPosts } from '../lib/index'
 
 const ViewFeed = () => {
-  const [showComponent,setShowComponent]=useState(false)
-  let { posts } = useContext(appContext);
-  const {id}=useParams()
+  const [showComponent,setShowComponent]=useState(true)
+  const [userPosts,setUserPosts]=useState(null)
+  let { posts } = useContext(AppContext);
   const handleToggle = () => {
     setShowComponent(!showComponent);
   };
+const otherPosts=posts?.filter((posts)=>posts.userId._id!==user._id)
 
-const userPosts=posts.filter((post)=>post.userId._id===id)
-const otherPosts=posts.filter((posts)=>posts.userId._id!=id)
+useEffect(()=>{
+async function getFreshData(){
+  const allPostsData=getAllPosts()
+  const allPosts=await allPostsData
+  const userPosts=allPosts?.filter((post)=>post.userId._id===user._id)
+  setUserPosts(userPosts)
+}
+getFreshData()
+},[userPosts])
+
+if(!userPosts) {
+return (  
+  <div className='w-full h-full bg-slate-400 flex justify-center items-center mx-auto px-4 py-8'>
+    <h2 className='fornt-bold text-2xl font-serif'>You has not created any posts yet! Do create one</h2>
+  </div>
+ )
+}
+
 return (
     <>
-      <div className='w-full h-full p-3 bg-slate-400 flex flex-col items-center'>
+      <div className='w-full h-full p-3 flex flex-col items-center'>
        <div className='my-5 flex justify-center w-full'>
         <button
           onClick={handleToggle}
@@ -35,7 +52,7 @@ return (
         </button>
        </div> 
       <div className='flex flex-col items-center w-full '>
-        {showComponent && userPosts ==null ? <Spinner message='You has not created pins yet !'/> : <MasonaryLayout imageData={ showComponent ? userPosts :  otherPosts}/> }
+         <MasonaryLayout imageData={ showComponent ? userPosts :  otherPosts}/> 
       </div>
       </div>
     </>

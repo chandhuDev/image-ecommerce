@@ -1,15 +1,12 @@
-export default async function createPost({description,category,id,imageData}){
-     const formData = new FormData()
-     const imageDetails={
-        "description": description,
-        "category": category,
-        "userId": id
-     } 
-     formData.append("files.postImage",imageData,"imagePost.jpg")
-     formData.append("data",JSON.stringify(imageDetails))   
-    const response = await fetch(`http://localhost:5000/post/update`,{
-        method: 'POST', 
-        body: formData,
+export default async function createPost(data){
+  const response=await fetch('http://localhost:5000/post/create', {
+            method: 'POST',
+            body: data
       })
-    return response.json()
+      if(!response.ok){
+        throw new Error(response.message)
+    }
+  return response.json()
+ 
+     
 }

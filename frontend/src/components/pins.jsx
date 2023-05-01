@@ -1,24 +1,22 @@
-import React,{useState} from 'react'
+import React from 'react'
 import {Routes,Route} from 'react-router-dom'
-import {Navbar,Feed,Search,PinDetails,CreatePin} from './index'
+import {Navbar,Feed,PinDetails,CreatePin,SearchError,UserPage} from './index'
 
 
 
 const Pins = () => {
-  const [search,setSearch]=useState('')
-
   return (
-    <div className='px-2'>
-      <div className=''>
-         <Navbar search={search} setSearch={setSearch}/>
-      </div>
-      <div className='h-full'>
+    <div className='px-2 ml-1 overflow-x-hidden'>
+      <Navbar />
+    <div className='h-full'>
           <Routes>
-            <Route path="/*" element={<Feed search={search}/>} />
-            <Route path="/:id/:category" element={<Feed />} />
-            <Route path='/:id/pinDetail' element={<PinDetails />}/>
-             <Route path='/:id/createPin' element={<CreatePin />}/> 
-            <Route path='/:id/search/:categoryId' element={<Feed />}/>
+            <Route path="/" element={<Feed />} />
+            <Route path="/:category" element={<Feed />} />
+            <Route path="/home" element={<UserPage />} />
+            <Route path='/:pinId/pinDetail' element={<PinDetails />}/>
+            <Route path='/createPin' element={<CreatePin />}/> 
+            <Route path='/search/:category' element={<Feed />}/>
+            <Route path='/search/error' element={<SearchError />}/>
           </Routes>
       </div>
     </div>

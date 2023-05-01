@@ -1,11 +1,9 @@
 import React from 'react'
-import {Audio ,Circles ,MagnifyingGlass} from 'react-loader-spinner'
+import {MagnifyingGlass} from 'react-loader-spinner'
 
 
 const Spinner = ({message}) => {
- 
-
-  return (
+ return (
   <div className='flex flex-col items-center'>
   <MagnifyingGlass
   visible={true}
@@ -17,8 +15,8 @@ const Spinner = ({message}) => {
   glassColor = '#c0efff'
   color = '#e15b64'
 />
-      <p>{message}</p>
-    </div>
+    <p>{message}</p>
+  </div>
   )
 }
 

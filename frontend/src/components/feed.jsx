@@ -12,7 +12,7 @@ const Feed = () => {
     let categoryPosts={}
     const {posts}= useContext(AppContext)
     const postForFeed = posts?.filter(post=>post.userId._id!=user._id)
-    const checkSearch=checkCategory(categoryValue)
+    
     
     function checkCategory(){
      return categories.some(category=>category.name.toLowerCase()===categoryValue)

@@ -42,7 +42,7 @@ return (
       </div>
       <div className="absolute bottom-0">
           <div className="flex my-5 mb-3 gap-2 p-2 items-center bg-white  rounded-lg shadow-lg ">
-          <img src={user.profileImage} alt="user-profile" className='w-8 h-8 rounded-full'/>
+          <img src={user?.profileImage} alt="user-profile" className='w-8 h-8 rounded-full'/>
           <p className='text-center'>{user.username}</p>
           </div>
          </div>

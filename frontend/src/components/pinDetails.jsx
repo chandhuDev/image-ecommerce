@@ -11,7 +11,6 @@ const PinDetails=()=>{
   const [data,setData]=useState(locate.state && locate.state.image)
   const likeByUser = data?.like?.includes(user._id)
   const [like,setLike]=useState(likeByUser)
-  console.log(data)
   function setLikeFunc(){
     return like===likeByUser ? false : true
    }
@@ -27,7 +26,6 @@ const PinDetails=()=>{
     setComment('')
     const PostData = updatePost(updateData)
      const newData = await PostData
-     console.log(newData)
      newData&&setData(newData)
   }
   useEffect(()=>{

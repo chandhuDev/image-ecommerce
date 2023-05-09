@@ -23,7 +23,7 @@ return (
     </div>
     <div className="flex md:hidden flex-row">
       <div className="p-2 w-full flex flex-row justify-between items-center shadow-md">
-        <HiMenu fontSize={40} className="cursor-pointer" onClick={() => settoggleSideBar(!toggleSideBar)} />
+        <HiMenu fontSize={40} className="cursor-pointer" onClick={() => settoggleSideBar((toggleBar)=>!toggleBar)} />
         <Link to="/">
           <img src={logo} alt="logo" className="w-28" />
         </Link>

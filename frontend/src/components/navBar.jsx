@@ -35,7 +35,7 @@ const NavBar = () => {
          <IoMdSearch fontSize={30} className='ml-2 cursor-pointer' onClick={handleSearch} />
     </div>
     <div className='flex gap-2 text-center'>
-       <img src={user.profileImage} alt='user' className='w-15 h-15 hidden md:block rounded-full shadow-lg md:w-12 md:h-12 object-cover'/>
+       <img src={user?.profileImage} alt='user' className='w-15 h-15 hidden md:block rounded-full shadow-lg md:w-12 md:h-12 object-cover'/>
        <Link to={`/createPin`}>
        <IoMdAddCircle className='w-12 h-12 md:ml-0 mt-3 md:mt-0'/>
        </Link>

@@ -11,13 +11,30 @@ import {user} from '../utils/dataUtils'
 const HomeRoute = () => {
   const [toggleSideBar,settoggleSideBar]=useState(false)
   const scrollRef=useRef(null)
+
+
+  const handleClick = () => {
+    console.log("clicked")
+    console.log(toggleSideBar);
+    settoggleSideBar(false);
+  };
   
 useEffect(()=>{
    scrollRef.current.scrollTo(0,0)
   },[])
-  console.log("sidebartoggle",toggleSideBar)
-return (
-    <div className="flex bg-gray-50 md:flex-row flex-col h-screen transition-height duration-75 ease-out">
+  return (
+    <div className="flex bg-gray-50 md:flex-row flex-col h-full transition-height duration-75 ease-out">
+      {toggleSideBar && (
+        <div className="fixed w-3/5 bg-white h-screen overflow-y-auto shadow-md z-10 animate-slide-in">
+        <div
+          className="absolute w-full flex justify-end items-center top-6 right-8 z-20"
+          onClick={handleClick}
+        >
+          <AiFillCloseCircle fontSize={30} className="cursor-pointer" />
+        </div>
+        <Sidebar closeToggle={settoggleSideBar} />
+       </div>
+      )}
     <div className="hidden md:flex h-screen flex-initial">
       <Sidebar />
     </div>
@@ -29,14 +46,6 @@ return (
         </Link>
         <img src={user ? user.profileImage : ''} alt="logo"  className='ml-1 w-14 rounded-full'/>
       </div>
-      {toggleSideBar && (
-      <div className="fixed w-3/5 bg-white h-screen overflow-y-auto shadow-md z-10 animate-slide-in">
-        <div className="absolute w-full flex justify-end items-center top-6" onClick={() => settoggleSideBar((toggle)=>!toggle)}>
-          <AiFillCloseCircle fontSize={30} className="cursor-pointer"  />
-        </div>
-        <Sidebar closeToggle={settoggleSideBar} />
-      </div>
-      )}
     </div>
     <div className="pb-2 flex-1 h-screen overflow-y-scroll" ref={scrollRef}>
     <Routes>

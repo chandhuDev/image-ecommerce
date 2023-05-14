@@ -8,7 +8,7 @@ import {user} from '../utils/dataUtils'
 const isNotActiveStyles='flex ietms-center px-5 gap-3 text-gray-500 hover:text-black transition-all duration-200 ease-in-out captialize'
 const isActiveStyles='flex items-center px-5 gap-3 font-bold border-r-2 border-black  transition-all duration-200 ease-in-out uppercase'
 
-const sideBar = ({closeToggle}) => {
+const SideBar = ({closeToggle}) => {
 
   const handleCloseSideBar=()=>{
     if(closeToggle){ 
@@ -50,4 +50,4 @@ return (
   )
 }
 
-export default sideBar
+export default SideBar

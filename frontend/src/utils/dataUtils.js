@@ -15,6 +15,8 @@ export default AppContext
 const userData=localStorage.getItem("userData")
 export const user = JSON.parse(userData)
 
+export const userImage=user.profileImage
+
 export const categories = [
     {
       name: 'Wallpapers',

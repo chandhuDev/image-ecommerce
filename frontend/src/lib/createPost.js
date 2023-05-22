@@ -1,12 +1,13 @@
-export default async function createPost(data){
-  const response=await fetch('http://localhost:5000/post/create', {
-            method: 'POST',
-            body: data
-      })
-      if(!response.ok){
-        throw new Error(response.message)
+export default async function createPost(data) {
+  const response = await fetch(
+    `${process.env.REACT_APP_SERVER_URL}/post/create`,
+    {
+      method: "POST",
+      body: data,
     }
-  return response.json()
- 
-     
+  );
+  if (!response.ok) {
+    throw new Error(response.message);
+  }
+  return response.json();
 }

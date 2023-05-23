@@ -5,7 +5,7 @@ import { useNavigate  } from 'react-router-dom'
 const Pin = ({image}) => {
    const navigate=useNavigate()
    function getPinDetails(){
-   navigate(`/${image._id}/pinDetail`,{
+   navigate(`/${image?._id}/pinDetail`,{
     state:{
       image
    }})

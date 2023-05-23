@@ -4,27 +4,28 @@ import AppContext ,{user} from '../utils/dataUtils'
 import { getAllPosts } from '../lib/index'
 
 const ViewFeed = () => {
-  const [showComponent,setShowComponent]=useState(true)
+  const [showComponent,setShowComponent]=useState(false)
   const [userPosts,setUserPosts]=useState(null)
   let { posts } = useContext(AppContext);
   const handleToggle = () => {
     setShowComponent(!showComponent);
   };
-const otherPosts=posts?.filter((posts)=>posts.userId._id!==user._id)
+const otherPosts=posts?.filter((posts)=>posts?.userId?._id!==user?._id)
 
 useEffect(()=>{
 async function getFreshData(){
   const allPostsData=getAllPosts()
   const allPosts=await allPostsData
-  const userPosts=allPosts?.filter((post)=>post.userId._id===user._id)
+  const userPosts=allPosts?.filter((post)=>post?.userId?._id===user?._id)
   setUserPosts(userPosts)
 }
 getFreshData()
 },[userPosts])
 
-if(!userPosts) {
+
+if(!showComponent&&userPosts?.length==0) {
 return (  
-  <div className='w-full h-full bg-slate-400 flex justify-center items-center mx-auto px-4 py-8'>
+  <div className='w-full h-full bg-slate-200 flex justify-center items-center mx-auto px-4 py-8'>
     <h2 className='fornt-bold text-2xl font-serif'>You has not created any posts yet! Do create one</h2>
   </div>
  )
@@ -36,17 +37,13 @@ return (
        <div className='my-5 flex justify-center w-full'>
         <button
           onClick={handleToggle}
-          className={`px-4 py-2 rounded-tl-lg rounded-bl-lg ${
-            showComponent ? 'bg-orange-500' : 'bg-purple-500'
-          }`}
+          className={`px-4 py-2 rounded-tl-lg rounded-bl-lg bg-white`}
         >
          Your pins
         </button>
         <button
           onClick={handleToggle}
-          className={`px-4 py-2 rounded-tr-lg rounded-br-lg ${
-            !showComponent ? 'bg-orange-500' : 'bg-purple-500'
-          }`}
+          className={`px-4 py-2 rounded-tr-lg rounded-br-lg bg-white`}
         >
           Others feed
         </button>

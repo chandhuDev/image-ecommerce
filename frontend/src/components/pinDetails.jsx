@@ -19,9 +19,9 @@ const PinDetails=()=>{
      const likeBoolean = setLikeFunc()
      const updateData={
       comment: comment,
-      postId: data._id,
+      postId: data?._id,
       like: likeBoolean && likeBoolean,
-      userId: user._id
+      userId: user?._id
     }
     setComment('')
     const PostData = updatePost(updateData)

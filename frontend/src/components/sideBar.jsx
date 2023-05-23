@@ -33,9 +33,9 @@ return (
             {categories.map((category)=>{
              return ( <NavLink to={`/${category.name}`}className={({isActive})=>{
                 return isActive ? isActiveStyles :isNotActiveStyles
-              }} onClick={handleCloseSideBar} key={category.name}>
-                <img src={category.image} alt='image' className='h-8 w-8 rounded-full'/>
-               <span className='text-center mt-1'>{category.name}</span>
+              }} onClick={handleCloseSideBar} key={category?.name}>
+                <img src={category?.image} alt='image' className='h-8 w-8 rounded-full'/>
+               <span className='text-center mt-1'>{category?.name}</span>
               </NavLink>
             )})}
          </div>

@@ -44,7 +44,7 @@ useEffect(()=>{
         <Link to="/">
           <img src={logo} alt="logo" className="w-28" />
         </Link>
-        <img src={user ? user.profileImage : ''} alt="logo"  className='ml-1 w-14 rounded-full'/>
+        <img src={user ? user?.profileImage : ''} alt="logo"  className='ml-1 w-14 rounded-full'/>
       </div>
     </div>
     <div className="pb-2 flex-1 h-screen overflow-y-scroll" ref={scrollRef}>

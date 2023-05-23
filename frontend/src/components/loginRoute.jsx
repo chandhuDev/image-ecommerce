@@ -13,8 +13,7 @@ const LoginRoute = () => {
   return (
     <div className='h-screen'>
      <div className="relative w-full h-full" >
-       <video src={video}  autoPlay muted loop controls={false}
-       className="w-full h-full object-cover" />
+       <div className="w-full h-full object-cover bg-loginbackground" />
       <div className="flex flex-col items-center justify-center absolute top-0 left-0 right-0 bottom-0 bg-blackOverlay" >
           <div className='p-2 bg-slate-200 rounded-full'>
                <img src={logo} alt="shareme-logo"  width="100px"/>

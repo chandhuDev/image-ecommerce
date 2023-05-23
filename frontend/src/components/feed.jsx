@@ -11,15 +11,15 @@ const Feed = () => {
     const categoryValue=category&&category.toLowerCase()
     let categoryPosts={}
     const {posts}= useContext(AppContext)
-    const postForFeed = posts?.filter(post=>post.userId._id!=user?._id)
+    const postForFeed = posts?.filter(post=>post?.userId?._id!=user?._id)
     
     
     function checkCategory(){
-     return categories.some(category=>category.name.toLowerCase()===categoryValue)
+     return categories?.some(category=>category?.name?.toLowerCase()===categoryValue)
     }
 
     if(categoryValue){
-      categoryPosts=postForFeed?.filter(post => post.categoryId.category===categoryValue)
+      categoryPosts=postForFeed?.filter(post => post?.categoryId?.category===categoryValue)
     }
 
 return (

@@ -33,10 +33,10 @@ if(!comment){
 
 function Comment({ text,image,name }) {
   return (
-    <div className="w-full space-x-4 px-4 py-3 flex flex-col text-2xl gap-y-4 border border-gray-200 bg-slate-200 rounded-lg">
+    <div className="w-full space-x-4 px-4 py-3 flex flex-col text-2xl gap-y-4 border border-gray-200 bg-white/90 shadow-xl rounded-lg">
       <div className='flex flex-row gap-x-3 ml-3'>
         <img className="w-8 h-8 rounded-full" src={image} alt='profile picture'/>
-        <p className="text-gray-800  font-semibold">{name}</p>
+        <p className="text-gray-900/80  font-semibold">{name}</p>
       </div>
       <h3 className='text-xl text-start'>{text}</h3>
     </div>

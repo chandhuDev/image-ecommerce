@@ -4,22 +4,20 @@ import {Login,Home} from './components/index'
 import { getAllPosts,getUser } from './lib/index'
 import AppContext from './utils/dataUtils'
 
-
-
 const App = () => {
- const [posts,setPosts]=useState()
- const [user,setUser]=useState()
+  const [posts,setPosts]=useState()
+  const [user,setUser]=useState()
   const Id = Cookies.get('userId');
   
   const [userid,setUserId]=useState(Id)
 
   const getUserData=async ()=>{
-    const sliceduserId=userid.slice(2).replace(/"/g, '');
+    const sliceduserId=userid?.slice(2).replace(/"/g, '');
     const userData= getUser(sliceduserId)
     const userDetails=await userData
-    setUser(userDetails)
     localStorage.setItem('userData',JSON.stringify(userDetails))
-   }
+    setUser(userDetails)
+  }
    
    async function getPosts(){
     const postDetails=getAllPosts()
@@ -31,13 +29,13 @@ const App = () => {
     getPosts()
   },[])
 
- useEffect(()=>{
-  getUserData()
- },[userid]) 
+  useEffect(()=>{
+    getUserData()
+  },[userid]) 
 
 return (
     <AppContext.Provider value={{posts}}>
-      {user ?  <Home /> : <Login />}
+      { user ?  <Home /> : <Login />}
     </AppContext.Provider>
   )
 }

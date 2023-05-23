@@ -36,7 +36,7 @@ const uploadImage = (e) => {
       const formdata=new FormData()
       formdata.append('description',description)
       formdata.append('category',category)
-      formdata.append('userId',user._id)
+      formdata.append('userId',user?._id)
       formdata.append('postImage',imageAsset)
       postData(formdata)
     } else {

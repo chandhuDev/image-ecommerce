@@ -54,6 +54,7 @@ module.exports = {
         blackOverlay: 'rgba(0, 0 ,0 ,0.6)',
         transparantColor:'rgba(255,255,255,0.6)',
         gradient:'rgba(0,0,0,0.4)',
+        loginbackground:'#C7F2A4',
       },
       keyframes: {
         'slide-in': {

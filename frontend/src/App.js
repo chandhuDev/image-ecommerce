@@ -8,8 +8,8 @@ const App = () => {
   const [posts,setPosts]=useState()
   const [user,setUser]=useState()
   const Id = Cookies.get('userId');
-  
   const [userid,setUserId]=useState(Id)
+  console.log(userid)
 
   const getUserData=async ()=>{
     const sliceduserId=userid?.slice(2).replace(/"/g, '');

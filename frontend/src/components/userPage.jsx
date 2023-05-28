@@ -10,7 +10,7 @@ useEffect(()=>{
     async function getFreshData(){
       const allPostsData=getAllPosts()
       const allPosts=await allPostsData
-      const userPosts=allPosts?.filter((post)=>post?.userId._id===user?._id)
+      const userPosts=allPosts?.filter((post)=>post?.userId?._id===user?._id)
       setUserPosts(userPosts)
     }
    getFreshData()

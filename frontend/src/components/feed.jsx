@@ -1,7 +1,7 @@
 import React,{useContext} from 'react'
 import { useParams } from 'react-router-dom'
 import {MasonaryLayout} from './index'
-import AppContext,{ user,categories } from '../utils/dataUtils'
+import AppContext,{ user } from '../utils/dataUtils'
 
 
 
@@ -13,11 +13,6 @@ const Feed = () => {
     const {posts}= useContext(AppContext)
     const postForFeed = posts?.filter(post=>post?.userId?._id!=user?._id)
     
-    
-    function checkCategory(){
-     return categories?.some(category=>category?.name?.toLowerCase()===categoryValue)
-    }
-
     if(categoryValue){
       categoryPosts=postForFeed?.filter(post => post?.categoryId?.category===categoryValue)
     }

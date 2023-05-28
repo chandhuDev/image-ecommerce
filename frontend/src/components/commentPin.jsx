@@ -17,7 +17,7 @@ if(!comment){
   </div>
 }
 
-  return (
+return (
     <>
       <div className="w-full h-full  flex flex-col items-start  mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-4">Comments</h1>

@@ -29,7 +29,7 @@ const NavBar = () => {
          <input type='text' onChange={(e)=> setSearchData(e.target.value)}
          placeholder='Search only the mentioned category Pins'
          value={searchData}
-         className='w-11/12 py-5 text-xl md:h-4'
+         className='w-11/12 py-5 text-xl md:h-4 pl-5'
          onKeyDown={handleKeyDown}
          />
          <IoMdSearch fontSize={30} className='ml-2 cursor-pointer' onClick={handleSearch} />

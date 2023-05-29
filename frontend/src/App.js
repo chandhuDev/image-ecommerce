@@ -27,11 +27,13 @@ const App = () => {
 
   useEffect(()=>{
     getPosts()
+    if(userid){
+      getUserData()
+    }
   },[])
 
-  useEffect(()=>{
-    getUserData()
-  },[userid]) 
+  // useEffect(()=>{
+  // },[userid]) 
 
 return (
     <AppContext.Provider value={{posts}}>

@@ -6,6 +6,7 @@ const passportSetUp=require("./passport")
 const bodyParser = require('body-parser');
 const fileUpload=require("express-fileupload")
 const cloudinary = require('cloudinary').v2;
+const path = require('path')
 
 const app=express()
 app.use(bodyParser.json())
@@ -16,6 +17,13 @@ app.use(expressSession({
     saveUninitialized: true,
     cookie:{maxAge:60000}
 }))
+
+app.use(express.static(path.join(__dirname, 'dist')))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+});
+
 app.use(cors({
     origin:'*',
 }))

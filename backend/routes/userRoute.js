@@ -17,7 +17,7 @@ router.get("/google/callback",passport.authenticate("google",{failureRedirect:"/
         if(user){
           console.log('User 1',user._id);
           res.cookie('userId', user._id)
-          res.redirect(process.env.CLIENT_URL);
+          res.redirect('/');
           
         }
         else{
@@ -27,7 +27,7 @@ router.get("/google/callback",passport.authenticate("google",{failureRedirect:"/
           .then((user) => {
             console.log('new user',user._id);
             res.cookie('userId', user._id)
-            res.redirect(process.env.CLIENT_URL);
+            res.redirect('/');
           })
           .catch(err => console.error(err));
         }

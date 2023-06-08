@@ -1,6 +1,6 @@
 export default async function updatePost(data) {
   const response = await fetch(
-    `${process.env.REACT_APP_SERVER_URL}/post/update`,
+    `/post/update`,
     {
       method: "PUT",
       headers: {

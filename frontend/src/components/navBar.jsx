@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import {Link,useNavigate} from 'react-router-dom'
-import {IoMdSearch,IoMdAddCircle} from 'react-icons/io'
+import {IoMdSearch} from 'react-icons/io'
 import {user} from '../utils/dataUtils'
 
 const NavBar = () => {
@@ -24,20 +24,20 @@ const NavBar = () => {
 
 
   return (
-    <div className='flex gap-2 md:gap-4 w-full  pb-6 mt-3'>
-    <div className='flex justify-start items-center rounded-md bg-white mt-2  w-full shadow-md '>
+    <div className='flex gap-2 md:gap-4 w-full pb-6 mt-3'>
+    <div className='flex justify-around items-center rounded-md bg-white mt-2 w-2/3 shadow-md '>
          <input type='text' onChange={(e)=> setSearchData(e.target.value)}
          placeholder='Search only the mentioned category Pins'
          value={searchData}
-         className='w-11/12 py-5 text-xl md:h-4 pl-5'
+         className='w-[85%] py-5 md:text-xl text-base md:h-4 pl-3'
          onKeyDown={handleKeyDown}
          />
          <IoMdSearch fontSize={30} className='ml-2 cursor-pointer' onClick={handleSearch} />
     </div>
-    <div className='flex gap-2 text-center'>
+    <div className='flex gap-2 text-center justify-center items-center'>
        <img src={user?.profileImage} alt='user' className='w-15 h-15 hidden md:block rounded-full shadow-lg md:w-12 md:h-12 object-cover'/>
        <Link to={`/createPin`}>
-       <IoMdAddCircle className='w-12 h-12 md:ml-0 mt-3 md:mt-0'/>
+        <p className='md:text-xl text-lg rounded-md bg-slate-400 text-white/80 text-center font-semibold md:ml-10 ml-0 p-1'>Create Pin</p>
        </Link>
     </div>
   </div>

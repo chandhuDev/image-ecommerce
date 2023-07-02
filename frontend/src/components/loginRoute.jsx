@@ -1,12 +1,11 @@
 import React from 'react'
 import {FcGoogle} from 'react-icons/fc'
-import video from '../assests/share.mp4'
 import logo from '../assests/logo.png'
 
 const LoginRoute = () => {
 
   function goggleButton(){
-    window.open(`/user/google/callback`,"_self");
+    window.open(`${process.env.REACT_APP_SERVER_URL}/user/google/callback`,"_self");
   }
 
 

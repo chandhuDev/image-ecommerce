@@ -11,6 +11,7 @@ const PinDetails=()=>{
   const [data,setData]=useState(locate.state && locate.state.image)
   const likeByUser = data?.like?.includes(user._id)
   const [like,setLike]=useState(likeByUser)
+
   function setLikeFunc(){
     return like===likeByUser ? false : true
    }
@@ -48,8 +49,8 @@ return (
           </div>
           <div className='md:mt-8 mt-4 flex flex-row w-full h-full md:gap-x-10 gap-x-4 justify-center items-center'> 
               <p className='md:text-xl text-base font-semibold'> {data?.like?.length} likes </p>
-              <button className={`md:px-4 px-2 md:py-2 py-1 ${like?'bg-purple-500':'bg-slate-300'} md:text-xl text-base font-thin font-serif rounded `} disabled={like || comment ? false : true} onClick={()=>setLike(like=>!like)}>Like</button>
-              <button className=" md:px-4 md:py-2 px-2 py-1 text-center rounded-md md:border-2 border-1 transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 " onClick={()=>updateData()}>Submit</button>
+              <button className={`md:px-4 px-2 md:py-2 py-1 ${like?'bg-purple-500':'bg-slate-400'} md:text-xl text-base font-thin font-serif rounded-md `}   onClick={()=>setLike(like=>!like)}>Like</button>
+              <button className=" md:px-4 md:py-2 px-2 py-1 text-center rounded-md md:border-2 border-1 transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500/70 " onClick={()=>updateData()}>Submit</button>
           </div>
          </div>
        </div>

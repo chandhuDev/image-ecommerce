@@ -2,6 +2,10 @@ module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    screens: {
+      xs: '480px',
+      md: '640px',
+    },
     extend: {
       margin: {
         320: '320px',
@@ -10,6 +14,7 @@ module.exports = {
         'regal-blue': '#243c5a',
       },
       width: {
+        140: '140px',
         190: '190px',
         275: '275px',
         300: '300px',

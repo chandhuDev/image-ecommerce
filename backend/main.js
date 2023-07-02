@@ -9,6 +9,7 @@ const cloudinary = require('cloudinary').v2;
 const path = require('path')
 
 const app=express()
+
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'build')))
 app.get('/', (req, res) => {

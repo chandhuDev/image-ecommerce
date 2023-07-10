@@ -5,7 +5,7 @@ import logo from '../assests/logo.png'
 const LoginRoute = () => {
 
   function goggleButton(){
-    window.open(`${process.env.REACT_APP_SERVER_URL}/user/google/callback`,"_self");
+    window.open(`/user/google/callback`,"_self");
   }
 
 

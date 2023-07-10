@@ -1,10 +1,10 @@
-import React,{useState} from 'react'
+import React,{ useEffect, useState } from 'react'
 import {Link,useNavigate} from 'react-router-dom'
 import {IoMdSearch} from 'react-icons/io'
-import {user} from '../utils/dataUtils'
+
 
 const NavBar = () => {
-
+  const [image,setImage]=useState()
   const [searchData,setSearchData]=useState('')
   const navigate=useNavigate()
 
@@ -22,6 +22,11 @@ const NavBar = () => {
     }
   }
 
+  useEffect(()=>{
+    const userData=localStorage.getItem("userData")
+    const user = userData&&JSON.parse(userData)
+    setImage(user?.profileImage)
+  },[])
 
   return (
     <div className='flex gap-2 md:gap-4 w-full pb-6 mt-3'>
@@ -35,7 +40,7 @@ const NavBar = () => {
          <IoMdSearch fontSize={30} className='ml-2 cursor-pointer' onClick={handleSearch} />
     </div>
     <div className='flex gap-2 text-center justify-center items-center'>
-       <img src={user?.profileImage} alt='user' className='w-15 h-15 hidden md:block rounded-full shadow-lg md:w-12 md:h-12 object-cover'/>
+       <img src={image&&image} alt='user' className='w-15 h-15 hidden md:block rounded-full shadow-lg md:w-12 md:h-12 object-cover'/>
        <Link to={`/createPin`}>
         <p className='md:text-xl text-lg rounded-md bg-slate-400 text-white/80 text-center font-semibold md:ml-10 ml-0 p-1'>Create Pin</p>
        </Link>
